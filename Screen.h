@@ -14,6 +14,9 @@
 
 namespace CoreGL {
 
+    /**
+     * The main render target, aka Screen. No framebuffer here, but the back buffer directly.
+     */
     class Screen : public RenderTarget {
     public:
         Screen()

@@ -18,7 +18,10 @@ namespace CoreGL {
      */
     class EventManager {
     public:
-        virtual ivec2 cursorPosition() const = 0;
+        /**
+         * The position in pixel of the mouse pointer.
+         */
+        virtual ivec2 mousePosition() const = 0;
     };
 }
 

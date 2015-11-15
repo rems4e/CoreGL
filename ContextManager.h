@@ -69,14 +69,6 @@ namespace CoreGL {
 
     namespace ContextManager {
         /**
-         * Context/implementation/driver specific values reflecting respectively the maximum
-         * multisample
-         * value available, and the maximum texture filtering level available.
-         */
-        GLsizei maxSamples();
-        GLfloat maxAnisotropy();
-
-        /**
          * Notifies the underlying GLContext that it needs to change its resolution.
          * The GLContext is responsible for actually modifying the resolution.
          */

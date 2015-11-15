@@ -16,18 +16,9 @@
 
 namespace CoreGL {
 
-    struct Box {
-        Box() = default;
-        Box(vec3 const &o, vec3 const &dim)
-                : origin(o)
-                , size(dim) {}
-
-        bool intersection(Box const &b) const;
-
-        vec3 origin;
-        vec3 size;
-    };
-
+    /**
+     * Utility 2D rectangle class.
+     */
     struct Rectangle {
         coordinate_t left, top;
         dimension_t width, height;
@@ -62,7 +53,7 @@ namespace CoreGL {
             return *this;
         }
 
-        vec2 origine() const {
+        vec2 origin() const {
             return vec2(left, top);
         }
         vec2 size() const {
@@ -76,29 +67,32 @@ namespace CoreGL {
             return *this;
         }
 
+        /**
+         * Checks if the parameter is contained in the rectangle.
+         */
+        bool contains(Rectangle const &r) const {
+            return r.left >= left && r.top >= top && r.left + r.width <= left + width &&
+                   r.top + r.height <= top + height;
+        }
+
+        /**
+         * Checks if the point is contained in the rectangle.
+         */
         bool contains(vec2 const &p) const {
-            return Rectangle(p, vec2(0.0)) < *this;
+            return this->contains(Rectangle{p, vec2{0.0}});
         }
 
-        bool operator==(Rectangle const &r) const {
-            return left == r.left && top == r.top && width == r.width && height == r.height;
-        }
-        bool operator!=(Rectangle const &r) const {
-            return !(*this == r);
-        }
-
-        bool operator<(Rectangle const &r) const { // Inclusion stricte dans r
-            return left >= r.left && top >= r.top && left + width <= r.left + r.width &&
-                   top + height <= r.top + r.height && *this != r;
-        }
-        bool operator<=(Rectangle const &r) const { // Inclusion dans r
-            return *this < r || *this == r;
-        }
-
+        /**
+         * Rectangle of null surface.
+         */
         bool empty() const {
             return Geometry::nullValue(width * height);
         }
 
+        /**
+         * Return the rectangle formed by the intersection of *this and the parameter. If the two
+         * shapes do not overlap, then an empty rectangle is returned.
+         */
         Rectangle intersection(Rectangle const &r2) const {
             Rectangle retour;
             retour.left = std::max(left, r2.left);
@@ -111,6 +105,10 @@ namespace CoreGL {
             return retour;
         }
 
+        /**
+         * Return the rectangle formed by the union of *this and the parameter, i.e. the lower bound
+         * of all the rectangles containing both rectangles.
+         */
         Rectangle unionRect(Rectangle const &r2) const {
             Rectangle retour;
             retour.left = std::min(left, r2.left);
@@ -121,12 +119,22 @@ namespace CoreGL {
             return retour;
         }
 
+        /**
+         * Checks whether the current instance and the parameter are intersecting.
+         */
         bool superposition(Rectangle const &r2) const {
             return ((left >= r2.left && left < r2.left + r2.width) ||
                     (left < r2.left && left + width > r2.left)) &&
                    ((top >= r2.top && top < r2.top + r2.height) || (top < r2.top && top + height > r2.top));
         }
     };
+
+    inline bool operator==(Rectangle const &r1, Rectangle const &r2) {
+        return r1.left == r2.left && r1.top == r2.top && r1.width == r2.width && r1.height == r2.height;
+    }
+    inline bool operator!=(Rectangle const &r1, Rectangle const &r2) {
+        return !(r1 == r2);
+    }
 
 
     std::ostream &operator<<(std::ostream &s, Rectangle const &r);

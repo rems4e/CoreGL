@@ -350,7 +350,7 @@ namespace CoreGL {
     }
 
     Rectangle VertexManager::pixelToScreen(Rectangle const &r) {
-        return Rectangle(VertexManager::pixelToScreen(r.origine()),
+        return Rectangle(VertexManager::pixelToScreen(r.origin()),
                          vec2(r.width / ContextManager::size().x, r.height / ContextManager::size().y));
     }
 }

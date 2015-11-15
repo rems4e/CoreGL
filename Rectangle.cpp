@@ -16,10 +16,4 @@ namespace CoreGL {
         return s << "{(" << r.left << ", " << r.top << "), (" << r.width << ", " << r.height
                  << ")}";
     }
-
-    bool Box::intersection(Box const &b) const {
-        vec3 ecart = glm::abs(b.origin - this->origin) - (b.size + this->size) / 2;
-
-        return ecart.x <= 0 && ecart.y <= 0 && ecart.z <= 0;
-    }
 }

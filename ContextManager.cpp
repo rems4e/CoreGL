@@ -46,8 +46,6 @@ namespace CoreGL {
 
         std::unique_ptr<Screen> _screen;
         std::unique_ptr<Framebuffer> _renderTarget;
-        GLsizei _maxSamples = 0;
-        GLfloat _maxAnisotropy = 0;
 
         std::uint64_t _lastObserverId = 1;
         std::map<std::uint64_t, ResolutionObserverRAII *> _resolutionObservers;
@@ -103,14 +101,6 @@ namespace CoreGL {
         _context = std::move(context);
 
         myGlewInit();
-
-        glGetIntegerv(GL_MAX_SAMPLES, &_maxSamples);
-        glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &_maxAnisotropy);
-
-        _context->setSamples(glm::clamp(_context->samples(), 1, _maxSamples));
-
-        _context->setAnisotropy(glm::clamp(_context->anisotropy(), 1.0f, _maxAnisotropy));
-        Texture::setAnisotropy(_context->anisotropy());
 
         _screen = std::make_unique<Screen>();
         _renderTarget = std::make_unique<Framebuffer>(_context->size(), 0, false);
@@ -171,14 +161,6 @@ namespace CoreGL {
         }
     }
 
-    GLsizei ContextManager::maxSamples() {
-        return _maxSamples;
-    }
-
-    GLfloat ContextManager::maxAnisotropy() {
-        return _maxAnisotropy;
-    }
-
     Texture ContextManager::currentDisplay() {
         return _renderTarget->clone(0);
     }
@@ -208,7 +190,7 @@ namespace CoreGL {
                              RenderTarget::MODELVIEW_BIT | RenderTarget::VIEWPORT_BIT);
 
         if(_cursorVisible) {
-            VertexManager::pushTex(*_cursor, CoreGL::eventManager().cursorPosition() - _distanceToCross);
+            VertexManager::pushTex(*_cursor, CoreGL::eventManager().mousePosition() - _distanceToCross);
         }
 
         VertexManager::flush();
