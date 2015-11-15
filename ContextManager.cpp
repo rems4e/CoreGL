@@ -17,6 +17,8 @@
 #include "CoreGL.h"
 #include <si-units/TimePoint.h>
 #include <array>
+#include "Screen.h"
+#include <map>
 
 using namespace Units::UnitsLiterals;
 
@@ -45,14 +47,46 @@ namespace ContextManager {
     GLsizei _maxSamples = 0;
     GLfloat _maxAnisotropy = 0;
 
-    ObserverID _lastObserverId = 0;
-    std::list<std::pair<std::function<void()>, ObserverID>> _resolutionObservers;
+    std::uint64_t _lastObserverId = 1;
+    std::map<std::uint64_t, ResolutionObserverRAII *> _resolutionObservers;
 
     void clean();
     void flush();
     void initDraw();
 
     void init(std::unique_ptr<GLContext> context);
+}
+
+ResolutionObserverRAII::ResolutionObserverRAII(std::function<void()> f)
+        : _observerFun(std::move(f))
+        , _id(ContextManager::_lastObserverId++) {
+    ContextManager::_resolutionObservers[_id] = this;
+}
+
+ResolutionObserverRAII::~ResolutionObserverRAII() {
+    if(_id != 0) {
+        ContextManager::_resolutionObservers.erase(_id);
+    }
+}
+
+ResolutionObserverRAII::ResolutionObserverRAII(ResolutionObserverRAII &&observer) {
+    *this = std::move(observer);
+}
+
+ResolutionObserverRAII &ResolutionObserverRAII::operator=(ResolutionObserverRAII &&observer) {
+    _id = observer._id;
+    observer._id = 0;
+
+    _observerFun = std::move(_observerFun);
+    observer._observerFun = nullptr;
+
+    return *this;
+}
+
+void ResolutionObserverRAII::notify() {
+    if(_observerFun) {
+        _observerFun();
+    }
 }
 
 void ContextManager::init(std::unique_ptr<GLContext> context) {
@@ -133,7 +167,7 @@ void ContextManager::changeResolution(ivec2 const &resolution, bool fullScreen, 
     _renderTarget->resize(resolution);
 
     for(auto obs : _resolutionObservers) {
-        obs.first();
+        obs.second->notify();
     }
 }
 
@@ -147,17 +181,6 @@ GLsizei ContextManager::maxSamples() {
 
 GLfloat ContextManager::maxAnisotropy() {
     return _maxAnisotropy;
-}
-
-void ContextManager::addResolutionObserver(std::function<void()> const &f, ObserverID &observerID) {
-    _resolutionObservers.emplace_back(f, ++_lastObserverId);
-    observerID = _resolutionObservers.back().second;
-}
-
-void ContextManager::removeResolutionObserver(ObserverID const &observer) {
-    _resolutionObservers.remove_if([&observer](decltype(_resolutionObservers)::value_type const &obs) {
-        return obs.second == observer;
-    });
 }
 
 Texture ContextManager::currentDisplay() {

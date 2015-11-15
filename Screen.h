@@ -10,11 +10,13 @@
 #define SCREEN_H
 
 #include "RenderTarget.h"
+#include "ContextManager.h"
 
 class Screen : public RenderTarget {
 public:
-    Screen();
-    ~Screen();
+    Screen()
+            : RenderTarget(ContextManager::size()) {}
+    ~Screen() = default;
 
     GLuint identifier() const override {
         return 0;
