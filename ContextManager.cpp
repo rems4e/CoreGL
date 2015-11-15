@@ -130,7 +130,7 @@ namespace CoreGL {
         glDepthMask(GL_TRUE);
         glDepthRange(0.0f, 1.0f);
 
-        Shader::orthoTex().bind();
+        ShaderProgram::orthoTex().bind();
 
         {
             std::array<GLubyte, 4> const data = {0, 0, 0, 255};
@@ -182,7 +182,7 @@ namespace CoreGL {
         Texture const &renderTarget = _renderTarget->colorBuffers()[0];
 
         RenderTarget::pop();
-        Shader::orthoTex().bind();
+        ShaderProgram::orthoTex().bind();
 
         VertexManager::pushTex(renderTarget, vec2{}, true);
         VertexManager::flush();

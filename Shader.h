@@ -23,17 +23,20 @@ namespace CoreGL {
 
     class UniformBuffer;
 
-    class Shader {
+    /**
+     * A class easying the use of GLSL shaders and programs.
+     */
+    class ShaderProgram {
     public:
         using PreprocessorDefine = std::pair<std::string, std::string>;
-        Shader(std::string const &vert,
-               std::string const &frag,
-               std::vector<PreprocessorDefine> const &preprocessorDefines = {});
-        ~Shader();
+        ShaderProgram(std::string const &vert,
+                      std::string const &frag,
+                      std::vector<PreprocessorDefine> const &preprocessorDefines = {});
+        ~ShaderProgram();
 
-        static Shader &orthoTex();
+        static ShaderProgram &orthoTex();
 
-        static Shader &blur(float radius);
+        static ShaderProgram &blur(float radius);
 
         void setUniform(char const *uniform, GLint v);
 
@@ -60,7 +63,7 @@ namespace CoreGL {
         void bind();
         static void unbind();
 
-        static Shader &current();
+        static ShaderProgram &current();
 
         std::string name() const;
 

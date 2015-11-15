@@ -104,13 +104,13 @@ namespace CoreGL {
 
     void RenderTarget::pushTransformation(mat4 const &transfo) {
         _modelView.push(_modelView.top() * transfo);
-        Shader::modelViewUpdate();
+        ShaderProgram::modelViewUpdate();
     }
 
     void RenderTarget::popTransformations(int nbSupr) {
         while(nbSupr--)
             _modelView.pop();
-        Shader::modelViewUpdate();
+        ShaderProgram::modelViewUpdate();
     }
 
     mat4 const &RenderTarget::projection() {
@@ -124,6 +124,6 @@ namespace CoreGL {
     void RenderTarget::setProjection(mat4 const &projection) {
         _projection = projection;
 
-        Shader::projectionUpdate();
+        ShaderProgram::projectionUpdate();
     }
 }

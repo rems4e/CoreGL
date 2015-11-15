@@ -32,21 +32,21 @@ namespace CoreGL {
         void frameConstantsUpdate();
     }
 
-    struct Shader::Pimpl {
+    struct ShaderProgram::Pimpl {
         friend void ShaderPrivate::init();
         friend void ShaderPrivate::frameConstantsUpdate();
 
     public:
-        Pimpl(Shader &that);
+        Pimpl(ShaderProgram &that);
         ~Pimpl();
 
         void init(std::string const &vert,
                   std::string const &frag,
                   std::vector<PreprocessorDefine> const &preprocessorDefines = {});
 
-        static Shader &orthoTex();
+        static ShaderProgram &orthoTex();
 
-        static Shader &blur(float radius);
+        static ShaderProgram &blur(float radius);
 
         void setUniform(char const *uniform, GLint v);
 
@@ -68,7 +68,7 @@ namespace CoreGL {
         void bind();
         static void unbind();
 
-        static Shader &current();
+        static ShaderProgram &current();
 
         std::string name() const;
 
@@ -84,14 +84,14 @@ namespace CoreGL {
             std::weak_ptr<Texture::TextureBase> _boundTexture;
         };
 
-        struct ShaderProgram {
+        struct Shader {
             GLint _id;
             GLenum _type;
             std::string _file;
             std::vector<Sampler> _samplers;
         };
-        struct ShaderProgramDeleter {
-            void operator()(ShaderProgram *);
+        struct ShaderDeleter {
+            void operator()(Shader *);
         };
 
         static GLint compile(std::string const &source, GLenum type, std::string const &fichier);
@@ -116,10 +116,10 @@ namespace CoreGL {
 
         static void frameConstantsUpdate();
 
-        Shader &_that;
+        ShaderProgram &_that;
         GLint _id;
-        std::shared_ptr<ShaderProgram> _shaders[ShaderTypesCount] = {{nullptr, ShaderProgramDeleter()},
-                                                                     {nullptr, ShaderProgramDeleter()}};
+        std::shared_ptr<Shader> _shaders[ShaderTypesCount] = {{nullptr, ShaderDeleter()},
+                                                                      {nullptr, ShaderDeleter()}};
         std::vector<Sampler> _samplers;
 
         mutable std::unordered_map<std::string, GLint> _parametres;
@@ -133,94 +133,97 @@ namespace CoreGL {
         static GLsizei _textureUnits;
 
         static std::shared_ptr<UniformBuffer> _frameConstantsBuffer;
-        static std::unordered_map<std::string, std::weak_ptr<ShaderProgram>> _sharedShaders[ShaderTypesCount];
-        static std::unique_ptr<Shader> _blur;
-        static std::unique_ptr<Shader> _orthoTex;
+        static std::unordered_map<std::string, std::weak_ptr<Shader>> _sharedShaders[ShaderTypesCount];
+        static std::unique_ptr<ShaderProgram> _blur;
+        static std::unique_ptr<ShaderProgram> _orthoTex;
 
-        static Shader *_current;
+        static ShaderProgram *_current;
     };
 
     void ShaderPrivate::init() {
-        Shader::Pimpl::init();
+        ShaderProgram::Pimpl::init();
     }
 
     void ShaderPrivate::frameConstantsUpdate() {
-        Shader::Pimpl::frameConstantsUpdate();
+        ShaderProgram::Pimpl::frameConstantsUpdate();
     }
 
-    Shader::Shader(std::string const &vert, std::string const &frag, std::vector<PreprocessorDefine> const &preprocessorDefines)
-            : _pimpl(std::make_unique<Shader::Pimpl>(*this)) {
+    ShaderProgram::ShaderProgram(std::string const &vert,
+                                 std::string const &frag,
+                                 std::vector<PreprocessorDefine> const &preprocessorDefines)
+            : _pimpl(std::make_unique<ShaderProgram::Pimpl>(*this)) {
         _pimpl->init(vert, frag, preprocessorDefines);
     }
 
-    Shader::~Shader() = default;
+    ShaderProgram::~ShaderProgram() = default;
 
-    Shader &Shader::orthoTex() {
+    ShaderProgram &ShaderProgram::orthoTex() {
         return Pimpl::orthoTex();
     }
-    Shader &Shader::blur(float radius) {
+    ShaderProgram &ShaderProgram::blur(float radius) {
         return Pimpl::blur(radius);
     }
-    void Shader::setUniform(char const *uniform, GLint v) {
+    void ShaderProgram::setUniform(char const *uniform, GLint v) {
         return _pimpl->setUniform(uniform, v);
     }
-    void Shader::setUniform(char const *uniform, float v) {
+    void ShaderProgram::setUniform(char const *uniform, float v) {
         return _pimpl->setUniform(uniform, v);
     }
-    void Shader::setUniform(char const *uniform, vec2 const &vec) {
+    void ShaderProgram::setUniform(char const *uniform, vec2 const &vec) {
         return _pimpl->setUniform(uniform, vec);
     }
-    void Shader::setUniform(char const *uniform, vec3 const &vec) {
+    void ShaderProgram::setUniform(char const *uniform, vec3 const &vec) {
         return _pimpl->setUniform(uniform, vec);
     }
-    void Shader::setUniform(char const *uniform, vec4 const &vec) {
+    void ShaderProgram::setUniform(char const *uniform, vec4 const &vec) {
         return _pimpl->setUniform(uniform, vec);
     }
-    void Shader::setUniform(char const *uniform, mat3 const &mat) {
+    void ShaderProgram::setUniform(char const *uniform, mat3 const &mat) {
         return _pimpl->setUniform(uniform, mat);
     }
-    void Shader::setUniform(char const *uniform, mat4 const &mat) {
+    void ShaderProgram::setUniform(char const *uniform, mat4 const &mat) {
         return _pimpl->setUniform(uniform, mat);
     }
-    void Shader::setTexture(char const *name, Texture const &tex) {
+    void ShaderProgram::setTexture(char const *name, Texture const &tex) {
         return _pimpl->setTexture(name, tex);
     }
-    void Shader::pushBuffer(std::string const &uniformBlockName, std::shared_ptr<UniformBuffer> const &buffer) {
+    void ShaderProgram::pushBuffer(std::string const &uniformBlockName,
+                                   std::shared_ptr<UniformBuffer> const &buffer) {
         return _pimpl->pushBuffer(uniformBlockName, buffer);
     }
-    void Shader::modelViewUpdate() {
+    void ShaderProgram::modelViewUpdate() {
         return Pimpl::modelViewUpdate();
     }
-    void Shader::projectionUpdate() {
+    void ShaderProgram::projectionUpdate() {
         return Pimpl::projectionUpdate();
     }
-    void Shader::bind() {
+    void ShaderProgram::bind() {
         return _pimpl->bind();
     }
-    void Shader::unbind() {
+    void ShaderProgram::unbind() {
         return Pimpl::unbind();
     }
-    Shader &Shader::current() {
+    ShaderProgram &ShaderProgram::current() {
         return Pimpl::current();
     }
-    std::string Shader::name() const {
+    std::string ShaderProgram::name() const {
         return _pimpl->name();
     }
 
 
-    std::vector<std::pair<UniformBuffer *, float>> Shader::Pimpl::_uniformBlockBindings;
-    std::shared_ptr<UniformBuffer> Shader::Pimpl::_frameConstantsBuffer = nullptr;
+    std::vector<std::pair<UniformBuffer *, float>> ShaderProgram::Pimpl::_uniformBlockBindings;
+    std::shared_ptr<UniformBuffer> ShaderProgram::Pimpl::_frameConstantsBuffer = nullptr;
 
-    std::unordered_map<std::string, std::weak_ptr<Shader::Pimpl::ShaderProgram>>
-    Shader::Pimpl::_sharedShaders[Shader::Pimpl::ShaderTypesCount];
+    std::unordered_map<std::string, std::weak_ptr<ShaderProgram::Pimpl::Shader>>
+    ShaderProgram::Pimpl::_sharedShaders[ShaderProgram::Pimpl::ShaderTypesCount];
 
-    GLsizei Shader::Pimpl::_textureUnits = 0;
+    GLsizei ShaderProgram::Pimpl::_textureUnits = 0;
 
-    std::unique_ptr<Shader> Shader::Pimpl::_blur = nullptr;
-    std::unique_ptr<Shader> Shader::Pimpl::_orthoTex = nullptr;
-    Shader *Shader::Pimpl::_current = nullptr;
+    std::unique_ptr<ShaderProgram> ShaderProgram::Pimpl::_blur = nullptr;
+    std::unique_ptr<ShaderProgram> ShaderProgram::Pimpl::_orthoTex = nullptr;
+    ShaderProgram *ShaderProgram::Pimpl::_current = nullptr;
 
-    GLenum Shader::Pimpl::shaderTypesMatch(ShaderType val) {
+    GLenum ShaderProgram::Pimpl::shaderTypesMatch(ShaderType val) {
         switch(val) {
             case VertexShader:
                 return GL_VERTEX_SHADER;
@@ -233,12 +236,12 @@ namespace CoreGL {
         return 0;
     }
 
-    Shader::Pimpl::Pimpl(Shader &that)
+    ShaderProgram::Pimpl::Pimpl(ShaderProgram &that)
             : _that(that) {}
 
-    void Shader::Pimpl::init(std::string const &vert,
-                             std::string const &frag,
-                             std::vector<PreprocessorDefine> const &preprocessorDefines) {
+    void ShaderProgram::Pimpl::init(std::string const &vert,
+                                    std::string const &frag,
+                                    std::vector<PreprocessorDefine> const &preprocessorDefines) {
         std::string prepDefines(" ");
         for(auto const &def : preprocessorDefines) {
             prepDefines += def.first + " " + def.second;
@@ -254,20 +257,20 @@ namespace CoreGL {
                 _sharedShaders[shaderType][*shaderPath[shaderType] + prepDefines].lock();
 
                 if(!_shaders[shaderType]) {
-                    _shaders[shaderType] = std::make_unique<ShaderProgram>();
+                    _shaders[shaderType] = std::make_unique<Shader>();
 
                     _sharedShaders[shaderType][vert + prepDefines] = _shaders[shaderType];
 
                     _shaders[shaderType]->_type =
-                    Shader::Pimpl::shaderTypesMatch(static_cast<ShaderType>(shaderType));
+                    ShaderProgram::Pimpl::shaderTypesMatch(static_cast<ShaderType>(shaderType));
                     _shaders[shaderType]->_file = *shaderPath[shaderType];
-                    std::string source = Shader::Pimpl::loadShader(*shaderPath[shaderType],
-                                                                   _shaders[shaderType]->_type,
-                                                                   _shaders[shaderType]->_samplers,
-                                                                   preprocessorDefines);
+                    std::string source = ShaderProgram::Pimpl::loadShader(*shaderPath[shaderType],
+                                                                          _shaders[shaderType]->_type,
+                                                                          _shaders[shaderType]->_samplers,
+                                                                          preprocessorDefines);
 
                     _shaders[shaderType]->_id =
-                    Shader::Pimpl::compile(source, _shaders[shaderType]->_type, *shaderPath[shaderType]);
+                    ShaderProgram::Pimpl::compile(source, _shaders[shaderType]->_type, *shaderPath[shaderType]);
                 }
             }
         }
@@ -303,7 +306,7 @@ namespace CoreGL {
         }
 
         try {
-            Shader::Pimpl::link(_id, frag);
+            ShaderProgram::Pimpl::link(_id, frag);
         } catch(std::runtime_error &e) {
             std::cerr << "Shader linking error : " + vert + " " + frag << std::endl;
             throw;
@@ -323,11 +326,11 @@ namespace CoreGL {
         }
     }
 
-    Shader::Pimpl::~Pimpl() {
+    ShaderProgram::Pimpl::~Pimpl() {
         // No need to release OpenGL data if the context is already gone
         if(CoreGL::initialized()) {
             if(_current == &_that) {
-                Shader::Pimpl::unbind();
+                ShaderProgram::Pimpl::unbind();
             }
 
             for(int i = 0; i < ShaderTypesCount; ++i) {
@@ -338,11 +341,11 @@ namespace CoreGL {
         }
     }
 
-    void Shader::Pimpl::ShaderProgramDeleter::operator()(Shader::Pimpl::ShaderProgram *prog) {
+    void ShaderProgram::Pimpl::ShaderDeleter::operator()(ShaderProgram::Pimpl::Shader *prog) {
         if(prog) {
             for(int i = 0; i < ShaderTypesCount; ++i) {
-                if(Shader::Pimpl::shaderTypesMatch(static_cast<ShaderType>(i)) == prog->_type) {
-                    Shader::Pimpl::_sharedShaders[i].erase(prog->_file);
+                if(ShaderProgram::Pimpl::shaderTypesMatch(static_cast<ShaderType>(i)) == prog->_type) {
+                    ShaderProgram::Pimpl::_sharedShaders[i].erase(prog->_file);
                     break;
                 }
             }
@@ -352,7 +355,7 @@ namespace CoreGL {
         }
     }
 
-    void Shader::Pimpl::init() {
+    void ShaderProgram::Pimpl::init() {
         GLint val;
         glGetIntegerv(GL_MAX_UNIFORM_BUFFER_BINDINGS, &val);
         _uniformBlockBindings.resize(val);
@@ -364,7 +367,7 @@ namespace CoreGL {
         _uniformBlockBindings[0] = std::make_pair(_frameConstantsBuffer.get(), 0);
     }
 
-    std::string Shader::Pimpl::name() const {
+    std::string ShaderProgram::Pimpl::name() const {
         std::string retour;
         for(int i = 0; i < ShaderTypesCount; ++i) {
             retour += ", ";
@@ -377,18 +380,18 @@ namespace CoreGL {
         return "{"s + retour.substr(2) + "}";
     }
 
-    Shader &Shader::Pimpl::orthoTex() {
+    ShaderProgram &ShaderProgram::Pimpl::orthoTex() {
         if(!_orthoTex) {
-            _orthoTex = std::make_unique<Shader>(CoreGL::resourcesPath() + "shaders/2D.vert",
+            _orthoTex = std::make_unique<ShaderProgram>(CoreGL::resourcesPath() + "shaders/2D.vert",
                                                  CoreGL::resourcesPath() + "shaders/2D.frag");
         }
 
         return *_orthoTex;
     }
 
-    Shader &Shader::Pimpl::blur(float radius) {
+    ShaderProgram &ShaderProgram::Pimpl::blur(float radius) {
         if(!_blur) {
-            _blur = std::make_unique<Shader>(CoreGL::resourcesPath() + "shaders/2D.vert",
+            _blur = std::make_unique<ShaderProgram>(CoreGL::resourcesPath() + "shaders/2D.vert",
                                              CoreGL::resourcesPath() + "shaders/flou.frag");
         }
         _blur->setUniform("_rayon", radius);
@@ -396,7 +399,7 @@ namespace CoreGL {
         return *_blur;
     }
 
-    void Shader::Pimpl::setUniform(char const *param, GLint v) {
+    void ShaderProgram::Pimpl::setUniform(char const *param, GLint v) {
         GLint loc = this->uniformLocation(param);
         if(loc == -1)
             return;
@@ -409,7 +412,7 @@ namespace CoreGL {
         glUniform1i(loc, v);
     }
 
-    void Shader::Pimpl::setUniform(char const *param, float v) {
+    void ShaderProgram::Pimpl::setUniform(char const *param, float v) {
         GLint loc = this->uniformLocation(param);
         if(loc == -1)
             return;
@@ -422,7 +425,7 @@ namespace CoreGL {
         glUniform1f(loc, v);
     }
 
-    void Shader::Pimpl::setUniform(char const *param, vec2 const &vec) {
+    void ShaderProgram::Pimpl::setUniform(char const *param, vec2 const &vec) {
         GLint loc = this->uniformLocation(param);
         if(loc == -1)
             return;
@@ -435,7 +438,7 @@ namespace CoreGL {
         glUniform2fv(loc, 1, &vec[0]);
     }
 
-    void Shader::Pimpl::setUniform(char const *param, vec3 const &vec) {
+    void ShaderProgram::Pimpl::setUniform(char const *param, vec3 const &vec) {
         GLint loc = this->uniformLocation(param);
         if(loc == -1)
             return;
@@ -448,7 +451,7 @@ namespace CoreGL {
         glUniform3fv(loc, 1, &vec[0]);
     }
 
-    void Shader::Pimpl::setUniform(char const *param, vec4 const &vec) {
+    void ShaderProgram::Pimpl::setUniform(char const *param, vec4 const &vec) {
         GLint loc = this->uniformLocation(param);
         if(loc == -1)
             return;
@@ -461,7 +464,7 @@ namespace CoreGL {
         glUniform4fv(loc, 1, &vec[0]);
     }
 
-    void Shader::Pimpl::setUniform(char const *param, mat3 const &mat) {
+    void ShaderProgram::Pimpl::setUniform(char const *param, mat3 const &mat) {
         GLint loc = this->uniformLocation(param);
         if(loc == -1)
             return;
@@ -474,7 +477,7 @@ namespace CoreGL {
         glUniformMatrix3fv(loc, 1, GL_FALSE, &mat[0][0]);
     }
 
-    void Shader::Pimpl::setUniform(char const *param, mat4 const &mat) {
+    void ShaderProgram::Pimpl::setUniform(char const *param, mat4 const &mat) {
         GLint loc = this->uniformLocation(param);
         if(loc == -1)
             return;
@@ -487,7 +490,7 @@ namespace CoreGL {
         glUniformMatrix4fv(loc, 1, GL_FALSE, &mat[0][0]);
     }
 
-    GLint Shader::Pimpl::uniformLocation(char const *param) const {
+    GLint ShaderProgram::Pimpl::uniformLocation(char const *param) const {
         GLint loc = -1;
         auto i = _parametres.find(param);
         if(i == _parametres.end()) {
@@ -498,7 +501,7 @@ namespace CoreGL {
         return loc;
     }
 
-    void Shader::Pimpl::setTexture(char const *name, Texture const &tex) {
+    void ShaderProgram::Pimpl::setTexture(char const *name, Texture const &tex) {
         auto it = std::find_if(_samplers.begin(),
                                _samplers.end(),
                                [name](Sampler const &s) { return s._name == name; });
@@ -524,38 +527,38 @@ namespace CoreGL {
         }
     }
 
-    void Shader::Pimpl::pushBuffer(std::string const &uniformBlockName,
+    void ShaderProgram::Pimpl::pushBuffer(std::string const &uniformBlockName,
                                    std::shared_ptr<UniformBuffer> const &buffer) {
         buffer->bind();
         GLuint index = glGetUniformBlockIndex(_id, uniformBlockName.c_str());
         _buffers.push_back(std::make_tuple(index, false, buffer));
     }
 
-    void Shader::Pimpl::modelViewUpdate() {
-        Shader &s = Shader::Pimpl::current();
+    void ShaderProgram::Pimpl::modelViewUpdate() {
+        ShaderProgram &s = ShaderProgram::Pimpl::current();
         s.setUniform("_modelToCamera", RenderTarget::top().modelView());
         s.setUniform("_3x3ModelToCamera", mat3(RenderTarget::top().modelView()));
     }
 
-    void Shader::Pimpl::projectionUpdate() {
-        Shader &s = Shader::Pimpl::current();
+    void ShaderProgram::Pimpl::projectionUpdate() {
+        ShaderProgram &s = ShaderProgram::Pimpl::current();
         s.setUniform("_cameraToClip", RenderTarget::top().projection());
     }
 
-    void Shader::Pimpl::frameConstantsUpdate() {
+    void ShaderProgram::Pimpl::frameConstantsUpdate() {
         _frameConstantsBuffer->setData(vec2(ContextManager::size()), 0, sizeof(glm::vec2));
         _frameConstantsBuffer->setData(CoreGL::timeSinceInit().toS(), sizeof(glm::vec2), sizeof(float));
         _frameConstantsBuffer->update();
     }
 
-    void Shader::Pimpl::bind() {
+    void ShaderProgram::Pimpl::bind() {
         if(_current != &_that) {
             VertexManager::flush();
             _current = &_that;
 
             glUseProgram(_id);
-            Shader::Pimpl::modelViewUpdate();
-            Shader::Pimpl::projectionUpdate();
+            ShaderProgram::Pimpl::modelViewUpdate();
+            ShaderProgram::Pimpl::projectionUpdate();
 
             for(auto i = _buffers.begin() + 1; i != _buffers.end(); ++i) {
                 std::get<2>(*i)->update();
@@ -588,15 +591,15 @@ namespace CoreGL {
         }
     }
 
-    void Shader::Pimpl::unbind() {
-        Shader::Pimpl::orthoTex().bind();
+    void ShaderProgram::Pimpl::unbind() {
+        ShaderProgram::Pimpl::orthoTex().bind();
     }
 
-    Shader &Shader::Pimpl::current() {
+    ShaderProgram &ShaderProgram::Pimpl::current() {
         return *_current;
     }
 
-    std::string Shader::Pimpl::loadShader(std::string const &chemin,
+    std::string ShaderProgram::Pimpl::loadShader(std::string const &chemin,
                                           GLenum type,
                                           std::vector<Sampler> &samplers,
                                           std::vector<PreprocessorDefine> const &preprocessorDefines) {
@@ -613,14 +616,14 @@ namespace CoreGL {
         fShad.read(&shadSource[0], dimShad);
         fShad.close();
 
-        shadSource = Shader::Pimpl::preprocess(shadSource, chemin, preprocessorDefines);
+        shadSource = ShaderProgram::Pimpl::preprocess(shadSource, chemin, preprocessorDefines);
 
-        Shader::Pimpl::getSamplers(shadSource, type, chemin, samplers);
+        ShaderProgram::Pimpl::getSamplers(shadSource, type, chemin, samplers);
 
         return shadSource;
     }
 
-    std::string Shader::Pimpl::preprocess(std::string shadSource,
+    std::string ShaderProgram::Pimpl::preprocess(std::string shadSource,
                                           std::string const &shaderPath,
                                           std::vector<PreprocessorDefine> const &preprocessorDefines) {
         auto it = shadSource.find('\n');
@@ -636,12 +639,12 @@ namespace CoreGL {
 
         shadSource.insert(it, defines);
 
-        shadSource = Shader::Pimpl::resolveIncludes(shadSource, shaderPath);
+        shadSource = ShaderProgram::Pimpl::resolveIncludes(shadSource, shaderPath);
 
         return shadSource;
     }
 
-    std::string Shader::Pimpl::resolveIncludes(std::string shadSource, std::string shaderPath) {
+    std::string ShaderProgram::Pimpl::resolveIncludes(std::string shadSource, std::string shaderPath) {
         auto separatorIndex = shaderPath.find_last_of("/");
         size_t correctedIndex = separatorIndex == std::string::npos ? -1 : separatorIndex;
 
@@ -702,7 +705,7 @@ namespace CoreGL {
         return shadSource;
     }
 
-    void Shader::Pimpl::getSamplers(std::string const &shaderSource,
+    void ShaderProgram::Pimpl::getSamplers(std::string const &shaderSource,
                                     GLenum shaderType,
                                     std::string const &shaderPath,
                                     std::vector<Sampler> &samplers) {
@@ -757,7 +760,7 @@ namespace CoreGL {
         }
     }
 
-    GLint Shader::Pimpl::compile(std::string const &source, GLenum type, std::string const &fichier) {
+    GLint ShaderProgram::Pimpl::compile(std::string const &source, GLenum type, std::string const &fichier) {
         GLint shader = glCreateShader(type);
 
         const char *src = &source[0];
@@ -804,7 +807,7 @@ namespace CoreGL {
         return shader;
     }
 
-    void Shader::Pimpl::link(GLint prog, std::string const &fichier) {
+    void ShaderProgram::Pimpl::link(GLint prog, std::string const &fichier) {
         glLinkProgram(prog);
 
         GLint etat = 0;

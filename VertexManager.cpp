@@ -274,7 +274,7 @@ namespace CoreGL {
             scissors.height = -scissors.height;
         }
 
-        Shader::current().setTexture("_tex", tex);
+        ShaderProgram::current().setTexture("_tex", tex);
 
         vec4 const &teinte = VertexManager::hue();
         vec4 c(1 - teinte.a * (1 - teinte.r),
@@ -324,7 +324,7 @@ namespace CoreGL {
     }
 
     void VertexManager::pushQuad(vec2 const &p1, vec2 const &p2, vec2 const &p3, vec2 const &p4, vec4 const &c) {
-        Shader::current().setTexture("_tex", ContextManager::emptyTex());
+        ShaderProgram::current().setTexture("_tex", ContextManager::emptyTex());
 
         VertexManager::pushVertex(VertexManager::pixelToScreen(p1), vec2(0, 0), c);
         VertexManager::pushVertex(VertexManager::pixelToScreen(p2), vec2(1, 0), c);
@@ -336,7 +336,7 @@ namespace CoreGL {
     }
 
     void VertexManager::pushTriangle(vec2 const &p1, vec2 const &p2, vec2 const &p3, vec4 const &c) {
-        Shader::current().setTexture("_tex", ContextManager::emptyTex());
+        ShaderProgram::current().setTexture("_tex", ContextManager::emptyTex());
 
         VertexManager::pushVertex(VertexManager::pixelToScreen(p1), vec2(0, 0), c);
         VertexManager::pushVertex(VertexManager::pixelToScreen(p2), vec2(1, 0), c);
