@@ -21,7 +21,7 @@ public:
     virtual std::vector<ivec2> availableResolutions(bool fullScreen) = 0;
 
     virtual void init() = 0;
-    virtual void changeResolution(ivec2 const &resolution, bool fullScreen, bool vsync) = 0;
+    virtual void updateResolution() = 0;
 
     virtual bool vsync() const = 0;
     virtual bool fullScreen() const = 0;

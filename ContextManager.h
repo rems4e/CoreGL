@@ -32,8 +32,9 @@ public:
      * @param f The function that will be called when the context's resolution changes.
      */
     ResolutionObserverRAII(std::function<void()> f);
-    template<typename Callable>
-    ResolutionObserverRAII(Callable &&c) : ResolutionObserverRAII{std::function<void()>{c}} {}
+    template <typename Callable>
+    ResolutionObserverRAII(Callable &&c)
+            : ResolutionObserverRAII{std::function<void()>{c}} {}
 
     /**
      * Upon destruction, the object deinstalls the observer.
@@ -62,12 +63,20 @@ private:
 };
 
 namespace ContextManager {
+    /**
+     * Checks whether the OpenGL context is in place or not. May be useful when creating/destroying
+     * global variables whose initialization order is unspecified (in different translation units).
+     */
     bool hasGLContext();
 
+    /**
+     * Context/implementation/driver specific values reflecting respectively the maximum multisample
+     * value available, and the maximum texture filtering level available.
+     */
     GLsizei maxSamples();
     GLfloat maxAnisotropy();
 
-    void changeResolution(ivec2 const &resolution, bool fullScreen, bool vsync, GLsizei samples, GLfloat anisotropy);
+    void updateResolution();
 
     // Les résolutions disponibles pour la fenêtre/le plein écran.
     std::vector<ivec2> availableResolutions(bool fullScreen);

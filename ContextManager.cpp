@@ -120,7 +120,7 @@ void ContextManager::init(std::unique_ptr<GLContext> context) {
     ShaderPrivate::init();
     VertexManager::init();
 
-    _context->changeResolution(_context->size(), _context->fullScreen(), _context->vsync());
+    _context->updateResolution();
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClearDepth(1.0);
@@ -158,13 +158,13 @@ void ContextManager::clean() {
     _context = nullptr;
 }
 
-void ContextManager::changeResolution(ivec2 const &resolution, bool fullScreen, bool vsync, GLsizei samples, GLfloat anisotropy) {
-    _context->changeResolution(resolution, fullScreen, vsync);
+void ContextManager::updateResolution() {
+    _context->updateResolution();
 
     _frequence = {};
 
-    _screen->resize(resolution);
-    _renderTarget->resize(resolution);
+    _screen->resize(_context->size());
+    _renderTarget->resize(_context->size());
 
     for(auto obs : _resolutionObservers) {
         obs.second->notify();
