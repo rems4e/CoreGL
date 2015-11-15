@@ -7,7 +7,7 @@
 //
 
 #include "VertexArrayObject.h"
-#include "ContextManager.h"
+#include "CoreGL.h"
 
 namespace CoreGL {
 
@@ -20,7 +20,7 @@ namespace CoreGL {
     VertexArrayObject::~VertexArrayObject() {
         if(_current == this)
             VertexArrayObject::unbind();
-        if(ContextManager::hasGLContext())
+        if(CoreGL::initialized())
             glDeleteVertexArrays(1, &_identifier);
     }
 
@@ -34,7 +34,7 @@ namespace CoreGL {
 
     void VertexArrayObject::unbind() {
         _current = nullptr;
-        if(ContextManager::hasGLContext())
+        if(CoreGL::initialized())
             glBindVertexArray(0);
     }
 

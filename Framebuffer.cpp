@@ -34,7 +34,7 @@ namespace CoreGL {
     }
 
     Framebuffer::~Framebuffer() {
-        if(ContextManager::hasGLContext()) {
+        if(CoreGL::initialized()) {
             glDeleteFramebuffers(1, &_id);
             glDeleteRenderbuffers(1, &_renderBuffer);
         }

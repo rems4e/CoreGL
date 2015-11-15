@@ -37,11 +37,12 @@ namespace CoreGL {
         friend void ShaderPrivate::frameConstantsUpdate();
 
     public:
-        Pimpl(Shader &that,
-              std::string const &vert,
-              std::string const &frag,
-              std::vector<PreprocessorDefine> const &preprocessorDefines = {});
+        Pimpl(Shader &that);
         ~Pimpl();
+
+        void init(std::string const &vert,
+                  std::string const &frag,
+                  std::vector<PreprocessorDefine> const &preprocessorDefines = {});
 
         static Shader &orthoTex();
 
@@ -148,7 +149,9 @@ namespace CoreGL {
     }
 
     Shader::Shader(std::string const &vert, std::string const &frag, std::vector<PreprocessorDefine> const &preprocessorDefines)
-            : _pimpl(std::make_unique<Shader::Pimpl>(*this, vert, frag, preprocessorDefines)) {}
+            : _pimpl(std::make_unique<Shader::Pimpl>(*this)) {
+        _pimpl->init(vert, frag, preprocessorDefines);
+    }
 
     Shader::~Shader() = default;
 
@@ -230,11 +233,12 @@ namespace CoreGL {
         return 0;
     }
 
-    Shader::Pimpl::Pimpl(Shader &that,
-                         std::string const &vert,
-                         std::string const &frag,
-                         std::vector<PreprocessorDefine> const &preprocessorDefines)
-            : _that(that) {
+    Shader::Pimpl::Pimpl(Shader &that)
+            : _that(that) {}
+
+    void Shader::Pimpl::init(std::string const &vert,
+                             std::string const &frag,
+                             std::vector<PreprocessorDefine> const &preprocessorDefines) {
         std::string prepDefines(" ");
         for(auto const &def : preprocessorDefines) {
             prepDefines += def.first + " " + def.second;
@@ -321,7 +325,7 @@ namespace CoreGL {
 
     Shader::Pimpl::~Pimpl() {
         // No need to release OpenGL data if the context is already gone
-        if(ContextManager::hasGLContext()) {
+        if(CoreGL::initialized()) {
             if(_current == &_that) {
                 Shader::Pimpl::unbind();
             }

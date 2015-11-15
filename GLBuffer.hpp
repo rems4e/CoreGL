@@ -6,14 +6,14 @@
 //
 //
 
-#include "ContextManager.h"
+#include "CoreGL.h"
 #include "VertexArrayObject.h"
 
 namespace CoreGL {
 
     template <GLenum Target>
     GLBufferTarget<Target>::~GLBufferTarget() {
-        if(ContextManager::hasGLContext()) {
+        if(CoreGL::initialized()) {
             VertexArrayObject::unbind();
             glBindBuffer(Target, 0);
             glDeleteBuffers(1, &_identifier);

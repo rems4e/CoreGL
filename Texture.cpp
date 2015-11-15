@@ -7,7 +7,7 @@
 //
 
 #include "Texture.h"
-#include "ContextManager.h"
+#include "CoreGL.h"
 #include "Shader.h"
 #include <iostream>
 
@@ -139,7 +139,7 @@ namespace CoreGL {
     }
 
     TextureBase::~TextureBase() {
-        if(ContextManager::hasGLContext())
+        if(CoreGL::initialized())
             glDeleteTextures(1, &_tex);
     }
 

@@ -69,14 +69,6 @@ namespace CoreGL {
 
     namespace ContextManager {
         /**
-         * Checks whether the OpenGL context is in place or not. May be useful when
-         * creating/destroying
-         * global variables whose initialization order is unspecified (in different translation
-         * units).
-         */
-        bool hasGLContext();
-
-        /**
          * Context/implementation/driver specific values reflecting respectively the maximum
          * multisample
          * value available, and the maximum texture filtering level available.

@@ -30,7 +30,7 @@ DepthBuffer::DepthBuffer(ivec2 const &size, GLsizei depth)
 }
 
 DepthBuffer::~DepthBuffer() {
-    if(ContextManager::hasGLContext()) {
+    if(CoreGL::initialized()) {
         glDeleteFramebuffers(1, &_id);
     }
 }

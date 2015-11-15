@@ -16,10 +16,12 @@ namespace CoreGL {
         std::unique_ptr<EventManager> _eventManager;
         std::string _resourcesPath;
         TimePoint _initTime;
+        std::atomic_bool _initialized{false};
     }
 
     namespace ContextManager {
         void init(std::unique_ptr<GLContext> context);
+        void clean();
     }
 
     void init(std::unique_ptr<GLContext> context, std::unique_ptr<EventManager> eventManager, std::string resourcesPath) {
@@ -28,6 +30,17 @@ namespace CoreGL {
         _initTime = TimePoint::now();
 
         ContextManager::init(std::move(context));
+
+        _initialized = true;
+    }
+
+    void clean() {
+        _initialized = false;
+        ContextManager::clean();
+    }
+
+    bool initialized() {
+        return _initialized;
     }
 
     std::string const &resourcesPath() {

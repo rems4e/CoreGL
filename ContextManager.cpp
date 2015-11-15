@@ -52,11 +52,9 @@ namespace CoreGL {
         std::uint64_t _lastObserverId = 1;
         std::map<std::uint64_t, ResolutionObserverRAII *> _resolutionObservers;
 
-        void clean();
-        void flush();
-        void initDraw();
-
         void init(std::unique_ptr<GLContext> context);
+
+        void clean();
     }
 
     ResolutionObserverRAII::ResolutionObserverRAII(std::function<void()> f)
@@ -92,7 +90,7 @@ namespace CoreGL {
     }
 
     void ContextManager::init(std::unique_ptr<GLContext> context) {
-        if(ContextManager::hasGLContext())
+        if(CoreGL::initialized())
             return;
 
         try {
@@ -173,10 +171,6 @@ namespace CoreGL {
         }
     }
 
-    bool ContextManager::hasGLContext() {
-        return _context != nullptr;
-    }
-
     GLsizei ContextManager::maxSamples() {
         return _maxSamples;
     }
@@ -224,11 +218,9 @@ namespace CoreGL {
         _screen->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | RenderTarget::MODELVIEW_BIT |
                        RenderTarget::VIEWPORT_BIT);
 
-        RenderTarget::push(*_renderTarget);
-    }
-
-    void ContextManager::initDraw() {
         ShaderPrivate::frameConstantsUpdate();
+
+        RenderTarget::push(*_renderTarget);
     }
 
     Rectangle ContextManager::bounds() {
