@@ -19,54 +19,57 @@
 #include <functional>
 #include <list>
 
-class UniformBuffer;
+namespace CoreGL {
 
-class Shader {
-public:
-    using PreprocessorDefine = std::pair<std::string, std::string>;
-    Shader(std::string const &vert,
-           std::string const &frag,
-           std::vector<PreprocessorDefine> const &preprocessorDefines = {});
-    ~Shader();
+    class UniformBuffer;
 
-    static Shader &orthoTex();
+    class Shader {
+    public:
+        using PreprocessorDefine = std::pair<std::string, std::string>;
+        Shader(std::string const &vert,
+               std::string const &frag,
+               std::vector<PreprocessorDefine> const &preprocessorDefines = {});
+        ~Shader();
 
-    static Shader &blur(float radius);
+        static Shader &orthoTex();
 
-    void setUniform(char const *uniform, GLint v);
+        static Shader &blur(float radius);
 
-    void setUniform(char const *uniform, float v);
-    void setUniform(char const *uniform, vec2 const &vec);
-    void setUniform(char const *uniform, vec3 const &vec);
-    void setUniform(char const *uniform, vec4 const &vec);
+        void setUniform(char const *uniform, GLint v);
 
-    void setUniform(char const *uniform, mat3 const &mat);
-    void setUniform(char const *uniform, mat4 const &mat);
+        void setUniform(char const *uniform, float v);
+        void setUniform(char const *uniform, vec2 const &vec);
+        void setUniform(char const *uniform, vec3 const &vec);
+        void setUniform(char const *uniform, vec4 const &vec);
 
-    void setTexture(char const *name, Texture const &tex);
+        void setUniform(char const *uniform, mat3 const &mat);
+        void setUniform(char const *uniform, mat4 const &mat);
 
-    void pushBuffer(std::string const &uniformBlockName, std::shared_ptr<UniformBuffer> const &buffer);
-    template <typename... Args>
-    void emplaceBuffer(std::string const &uniformBlockName, Args... args) {
-        auto buffer = std::make_shared<UniformBuffer>(args...);
-        this->pushBuffer(uniformBlockName, buffer);
-    }
+        void setTexture(char const *name, Texture const &tex);
 
-    static void modelViewUpdate();
-    static void projectionUpdate();
+        void pushBuffer(std::string const &uniformBlockName, std::shared_ptr<UniformBuffer> const &buffer);
+        template <typename... Args>
+        void emplaceBuffer(std::string const &uniformBlockName, Args... args) {
+            auto buffer = std::make_shared<UniformBuffer>(args...);
+            this->pushBuffer(uniformBlockName, buffer);
+        }
 
-    void bind();
-    static void unbind();
+        static void modelViewUpdate();
+        static void projectionUpdate();
 
-    static Shader &current();
+        void bind();
+        static void unbind();
 
-    std::string name() const;
+        static Shader &current();
+
+        std::string name() const;
 
 
-    struct Pimpl;
+        struct Pimpl;
 
-private:
-    std::unique_ptr<Pimpl> _pimpl;
-};
+    private:
+        std::unique_ptr<Pimpl> _pimpl;
+    };
+}
 
 #endif

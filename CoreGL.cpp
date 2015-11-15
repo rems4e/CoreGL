@@ -11,32 +11,34 @@
 
 using namespace Units;
 
-namespace {
-    std::unique_ptr<EventManager> _eventManager;
-    std::string _resourcesPath;
-    TimePoint _initTime;
-}
+namespace CoreGL {
+    namespace {
+        std::unique_ptr<EventManager> _eventManager;
+        std::string _resourcesPath;
+        TimePoint _initTime;
+    }
 
-namespace ContextManager {
-    void init(std::unique_ptr<GLContext> context);
-}
+    namespace ContextManager {
+        void init(std::unique_ptr<GLContext> context);
+    }
 
-void CoreGL::init(std::unique_ptr<GLContext> context, std::unique_ptr<EventManager> eventManager, std::string resourcesPath) {
-    _eventManager = std::move(eventManager);
-    _resourcesPath = std::move(resourcesPath);
-    _initTime = TimePoint::now();
+    void init(std::unique_ptr<GLContext> context, std::unique_ptr<EventManager> eventManager, std::string resourcesPath) {
+        _eventManager = std::move(eventManager);
+        _resourcesPath = std::move(resourcesPath);
+        _initTime = TimePoint::now();
 
-    ContextManager::init(std::move(context));
-}
+        ContextManager::init(std::move(context));
+    }
 
-std::string const &CoreGL::resourcesPath() {
-    return _resourcesPath;
-}
+    std::string const &resourcesPath() {
+        return _resourcesPath;
+    }
 
-Units::Duration CoreGL::timeSinceInit() {
-    return TimePoint::now() - _initTime;
-}
+    Units::Duration timeSinceInit() {
+        return TimePoint::now() - _initTime;
+    }
 
-EventManager const &CoreGL::eventManager() {
-    return *_eventManager;
+    EventManager const &eventManager() {
+        return *_eventManager;
+    }
 }

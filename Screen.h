@@ -12,15 +12,18 @@
 #include "RenderTarget.h"
 #include "ContextManager.h"
 
-class Screen : public RenderTarget {
-public:
-    Screen()
-            : RenderTarget(ContextManager::size()) {}
-    ~Screen() = default;
+namespace CoreGL {
 
-    GLuint identifier() const override {
-        return 0;
-    }
-};
+    class Screen : public RenderTarget {
+    public:
+        Screen()
+                : RenderTarget(ContextManager::size()) {}
+        ~Screen() = default;
+
+        GLuint identifier() const override {
+            return 0;
+        }
+    };
+}
 
 #endif

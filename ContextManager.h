@@ -17,92 +17,160 @@
 #include <si-units/Units.h>
 #include "GLContext.h"
 
-class Texture;
+namespace CoreGL {
 
-/**
- * A class that allows to set observers of the context's resolution changes.
- * The observer function will be called when a resolution change occurs, for the life span of the
- * ResolutionObserverRAII object.
- */
-class ResolutionObserverRAII {
-public:
-    /**
-     * Created an observer that will be in charge of managing notifications to the given funtion
-     * until the object is destroyed or moved from.
-     * @param f The function that will be called when the context's resolution changes.
-     */
-    ResolutionObserverRAII(std::function<void()> f);
-    template <typename Callable>
-    ResolutionObserverRAII(Callable &&c)
-            : ResolutionObserverRAII{std::function<void()>{c}} {}
+    class Texture;
 
     /**
-     * Upon destruction, the object deinstalls the observer.
+     * A class that allows to set observers of the context's resolution changes.
+     * The observer function will be called when a resolution change occurs, for the life span of
+     * the
+     * ResolutionObserverRAII object.
      */
-    ~ResolutionObserverRAII();
+    class ResolutionObserverRAII {
+    public:
+        /**
+         * Created an observer that will be in charge of managing notifications to the given funtion
+         * until the object is destroyed or moved from.
+         * @param f The function that will be called when the context's resolution changes.
+         */
+        ResolutionObserverRAII(std::function<void()> f);
+        template <typename Callable>
+        ResolutionObserverRAII(Callable &&c)
+                : ResolutionObserverRAII{std::function<void()>{c}} {}
 
-    /**
-     * Copy and affectations are discarded for this type, but move operations are allowed.
-     * The moved-from object will not participate in any future resolution change notification and
-     * can be safely destroyed.
-     * The moved-to or new object will manage notifications to the underlying function until it is
-     * destroyed or moved from.
-     */
-    ResolutionObserverRAII(ResolutionObserverRAII &&);
-    ResolutionObserverRAII &operator=(ResolutionObserverRAII &&);
+        /**
+         * Upon destruction, the object deinstalls the observer.
+         */
+        ~ResolutionObserverRAII();
 
-    /**
-     * This method servers invokes the underlying observer function.
-     * When the the observer function is null, this is a no-op.
-     */
-    void notify();
+        /**
+         * Copy and affectations are discarded for this type, but move operations are allowed.
+         * The moved-from object will not participate in any future resolution change notification
+         * and
+         * can be safely destroyed.
+         * The moved-to or new object will manage notifications to the underlying function until it
+         * is
+         * destroyed or moved from.
+         */
+        ResolutionObserverRAII(ResolutionObserverRAII &&);
+        ResolutionObserverRAII &operator=(ResolutionObserverRAII &&);
 
-private:
-    std::function<void()> _observerFun;
-    std::uint64_t _id;
-};
+        /**
+         * This method servers invokes the underlying observer function.
+         * When the the observer function is null, this is a no-op.
+         */
+        void notify();
 
-namespace ContextManager {
-    /**
-     * Checks whether the OpenGL context is in place or not. May be useful when creating/destroying
-     * global variables whose initialization order is unspecified (in different translation units).
-     */
-    bool hasGLContext();
+    private:
+        std::function<void()> _observerFun;
+        std::uint64_t _id;
+    };
 
-    /**
-     * Context/implementation/driver specific values reflecting respectively the maximum multisample
-     * value available, and the maximum texture filtering level available.
-     */
-    GLsizei maxSamples();
-    GLfloat maxAnisotropy();
+    namespace ContextManager {
+        /**
+         * Checks whether the OpenGL context is in place or not. May be useful when
+         * creating/destroying
+         * global variables whose initialization order is unspecified (in different translation
+         * units).
+         */
+        bool hasGLContext();
 
-    void updateResolution();
+        /**
+         * Context/implementation/driver specific values reflecting respectively the maximum
+         * multisample
+         * value available, and the maximum texture filtering level available.
+         */
+        GLsizei maxSamples();
+        GLfloat maxAnisotropy();
 
-    // Les résolutions disponibles pour la fenêtre/le plein écran.
-    std::vector<ivec2> availableResolutions(bool fullScreen);
+        /**
+         * Notifies the underlying GLContext that it needs to change its resolution.
+         * The GLContext is responsible for actually modifying the resolution.
+         */
+        void updateResolution();
 
-    ivec2 size();
-    bool fullScreen();
+        /**
+         * Returns a list of the screen resolutions the underlying context is able to provide, in
+         * fullscreen or windowed mode.
+         * @param fullscreen Whether the requested resolutions are for fullscreen mode or not.
+         */
+        std::vector<ivec2> availableResolutions(bool fullScreen);
 
-    // Pointeur
-    bool cursorVisible();
-    void setCursorVisibility(bool visible);
+        /**
+         * The size of the context in pixels, i.e. the size of the drawable area.
+         */
+        ivec2 size();
+        /**
+         * Returns true if the current context is in fullscreen mode.
+         */
+        bool fullScreen();
 
-    Texture const &cursor();
-    void setCursor(Texture const &tex, ivec2 const &distanceToCross = {});
-    void resetCursor();
+        /**
+         * Gets/sets the visibility of the mouse pointer.
+         */
+        bool pointerVisible();
+        void setPointerVisibility(bool visible);
 
-    float ratio();
-    Rectangle bounds();
+        /**
+         * Sets the texture representing the mouse pointer. By default, there are not texture,
+         * meaning
+         * that no pointer will be shown, regardless of its visibility set above.
+         */
+        Texture const &pointer();
+        /**
+         * @param tex The new image that will be used as the mouse pointer.
+         * @param distanceToHotSpot The shift from the origin of the image to the desired hotspot of
+         * the
+         * pointer.
+         */
+        void setPointer(Texture const &tex, ivec2 const &distanceToHotspot = {});
+        /**
+         * Resets the default mouse pointer, i.e. no image at all.
+         */
+        void resetPointer();
 
-    Units::Frequency averagRefreshRate();
-    Units::Frequency instantRefreshRate();
+        /**
+         * The width-to-height ratio of the current display (a 1024×768 context will have a 1.25
+         * ratio).
+         */
+        float ratio();
+        /**
+         * A rectangle with zero-origin and the same size as returned by the size() function.
+         */
+        Rectangle bounds();
 
-    Texture currentDisplay();
+        /**
+         * The context's refresh rate, averaged on a 3 seconds period. This provides a stable
+         * indicator
+         * of the refresh rate.
+         */
+        Units::Frequency averagRefreshRate();
 
-    void flush();
+        /**
+         * The instant refresh rate of the context, useful for in-game lag detection or movement
+         * adaptation.
+         */
+        Units::Frequency instantRefreshRate();
 
-    Texture &emptyTex();
+        /**
+         * Creates a new texture containing the image currently displayed on the back buffer. The
+         * resulting image obviously depends on the current position in the rendering process.
+         * The texels are fetched and copied from the video memory, which is a costly operation and
+         * should not be abused.
+         */
+        Texture currentDisplay();
+
+        /**
+         * Flushes the current rendering pipeline and swaps the back buffer with the front buffer.
+         */
+        void flush();
+
+        /**
+         * An invisible (transparent), 1×1 sized texture, for what it's worth.
+         */
+        Texture const &emptyTex();
+    }
 }
 
 #endif

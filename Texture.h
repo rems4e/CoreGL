@@ -16,55 +16,60 @@
 #include <list>
 #include <memory>
 
-class Texture final {
-    friend bool operator==(Texture const &t1, Texture const &t2);
-    friend bool operator!=(Texture const &t1, Texture const &t2);
+namespace CoreGL {
+    class Texture final {
+        friend bool operator==(Texture const &t1, Texture const &t2);
+        friend bool operator!=(Texture const &t1, Texture const &t2);
 
-public:
-    enum Sampling { StandardSampling, DepthSampling, NumSampling };
+    public:
+        enum Sampling { StandardSampling, DepthSampling, NumSampling };
 
-    // On créé un image à partir d'un tableau 2D de pixels, rangés un rang après l'autre, avec 'profondeur' octet pour
-    // chaque pixel.
-    Texture(GLubyte const *pixels, ivec2 const &size, int depth, GLsizei samples, bool bgr, bool depthTexture = false);
-    Texture(GLenum target, Sampling sampling = StandardSampling);
+        // On créé un image à partir d'un tableau 2D de pixels, rangés un rang après l'autre, avec
+        // 'profondeur' octet pour
+        // chaque pixel.
+        Texture(GLubyte const *pixels, ivec2 const &size, int depth, GLsizei samples, bool bgr, bool depthTexture = false);
+        Texture(GLenum target, Sampling sampling = StandardSampling);
 
-    // Les texels sont partagés entre l'ancienne et la nouvelle texture pour la copie et l'affectation
-    Texture(Texture const &img);
+        // Les texels sont partagés entre l'ancienne et la nouvelle texture pour la copie et
+        // l'affectation
+        Texture(Texture const &img);
 
-    ~Texture() = default;
+        ~Texture() = default;
 
-    friend void swap(Texture &t1, Texture &t2) {
-        using std::swap;
-        swap(t1._base, t2._base);
-    }
+        friend void swap(Texture &t1, Texture &t2) {
+            using std::swap;
+            swap(t1._base, t2._base);
+        }
 
-    // new deep copy of the texture
-    Texture clone() const;
+        // new deep copy of the texture
+        Texture clone() const;
 
-    ivec2 const &size() const;
+        ivec2 const &size() const;
 
-    std::unique_ptr<GLubyte[]> pixels() const;
+        std::unique_ptr<GLubyte[]> pixels() const;
 
-    // Fichier de l'image ou chaîne vide si l'image a été générée à partir d'une matrice de pixels
-    std::string const &file() const;
+        // Fichier de l'image ou chaîne vide si l'image a été générée à partir d'une matrice de
+        // pixels
+        std::string const &file() const;
 
-    GLuint tex() const;
-    GLenum target() const;
+        GLuint tex() const;
+        GLenum target() const;
 
-    struct TextureBase;
-    std::shared_ptr<TextureBase> const &textureBase() const {
-        return _base;
-    }
+        struct TextureBase;
+        std::shared_ptr<TextureBase> const &textureBase() const {
+            return _base;
+        }
 
-    GLuint sampler() const;
+        GLuint sampler() const;
 
-    static void setAnisotropy(GLfloat anisotropy);
+        static void setAnisotropy(GLfloat anisotropy);
 
-private:
-    struct SharedTextureDeleter {
-        void operator()(TextureBase *tex);
+    private:
+        struct SharedTextureDeleter {
+            void operator()(TextureBase *tex);
+        };
+        std::shared_ptr<TextureBase> _base = {nullptr, SharedTextureDeleter()};
     };
-    std::shared_ptr<TextureBase> _base = {nullptr, SharedTextureDeleter()};
-};
+}
 
 #endif

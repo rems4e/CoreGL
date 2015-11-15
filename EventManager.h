@@ -11,9 +11,15 @@
 
 #include "Geometry.h"
 
-class EventManager {
-public:
-    virtual ivec2 cursorPosition() const = 0;
-};
+namespace CoreGL {
+    /**
+     * The bridge between this lib and the library managing the user events.
+     * Has to be inherited from by the users of CoreGL.
+     */
+    class EventManager {
+    public:
+        virtual ivec2 cursorPosition() const = 0;
+    };
+}
 
 #endif /* EventManager_h */

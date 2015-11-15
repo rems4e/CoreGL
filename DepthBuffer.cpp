@@ -12,6 +12,8 @@
 #include <stdexcept>
 #include <iostream>
 
+namespace CoreGL {
+
 DepthBuffer::DepthBuffer(ivec2 const &size, GLsizei depth)
         : RenderTarget(size), _depth(depth), _depthTexture(nullptr, size, _depth, 0, false, true) {
     GLint maxSize = 0;
@@ -61,4 +63,6 @@ void DepthBuffer::resize(ivec2 const size) {
         std::cerr << "FBO could not be created : " << glCheckFramebufferStatus(GL_FRAMEBUFFER) << " !" << std::endl;
         throw std::runtime_error("Unable to create Framebuffer Object");
     }
+}
+
 }

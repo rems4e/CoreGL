@@ -9,21 +9,24 @@
 #include "ContextManager.h"
 #include "VertexArrayObject.h"
 
-template <GLenum Target>
-GLBufferTarget<Target>::~GLBufferTarget() {
-    if(ContextManager::hasGLContext()) {
-        VertexArrayObject::unbind();
-        glBindBuffer(Target, 0);
-        glDeleteBuffers(1, &_identifier);
-    }
-}
+namespace CoreGL {
 
-template <GLenum Target>
-void GLBufferTarget<Target>::bind() {
-    if(Target == GL_ARRAY_BUFFER || Target == GL_ELEMENT_ARRAY_BUFFER) {
-        if(!VertexArrayObject::canBindBufferSafely())
+    template <GLenum Target>
+    GLBufferTarget<Target>::~GLBufferTarget() {
+        if(ContextManager::hasGLContext()) {
             VertexArrayObject::unbind();
+            glBindBuffer(Target, 0);
+            glDeleteBuffers(1, &_identifier);
+        }
     }
 
-    glBindBuffer(Target, _identifier);
+    template <GLenum Target>
+    void GLBufferTarget<Target>::bind() {
+        if(Target == GL_ARRAY_BUFFER || Target == GL_ELEMENT_ARRAY_BUFFER) {
+            if(!VertexArrayObject::canBindBufferSafely())
+                VertexArrayObject::unbind();
+        }
+
+        glBindBuffer(Target, _identifier);
+    }
 }
