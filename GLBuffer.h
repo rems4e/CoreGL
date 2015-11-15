@@ -17,59 +17,104 @@
 
 namespace CoreGL {
 
+    /**
+     * A general-purpose type-safe OpengL buffer class.
+     * It may contain vertices, normals, pixels, indexes, numeric data…
+     */
     class GLBuffer {
     public:
+        template <typename T>
+        using ForPointers = std::enable_if_t<std::is_pointer<T>::value, void>;
+
+        template <typename T>
+        using NotForPointers = std::enable_if_t<!std::is_pointer<T>::value, void>;
+
+        /**
+         * The OpenGL target of the buffer, differenciating an uniform buffer from an index buffer,
+         * for instance.
+         */
         virtual GLenum target() const = 0;
+
+        /**
+         * The size in bytes of the underlying memory buffer.
+         */
         virtual GLsizei size() const = 0;
+
+        /**
+         * Binds the buffer with on its target on the OpenGL driver side.
+         */
         virtual void bind() = 0;
+
+        /**
+         * Sends the data to the OpenGL driver.
+         * When used on an "unbuffered" buffer, this is the no-op, as the data is always sent as
+         * during the setData operations.
+         */
         virtual void update() = 0;
-        virtual void setData(GLubyte const *data, size_t size) {
-            this->setData(data, 0, size);
+
+        /**
+         * These methods are meant for copying the data pointed to by ptr, using various sizes and
+         * offsets (offset is 0 when unspecified).
+         * The update variants will send allways send the data to the OpenGL driver, whereas the
+         * non-update variants will only send the data to the driver when used in an "unbuffered"
+         * subclass of GLBuffer.
+         */
+        virtual void setData(GLubyte const *ptr, size_t size) {
+            this->setData(ptr, 0, size);
         }
-        virtual void setData(GLubyte const *data, size_t offset, size_t size) = 0;
-        virtual void setDataAndUpdate(GLubyte const *data, size_t size) {
-            this->setDataAndUpdate(data, 0, size);
+        virtual void setData(GLubyte const *ptr, size_t offset, size_t size) = 0;
+        virtual void setDataAndUpdate(GLubyte const *ptr, size_t size) {
+            this->setDataAndUpdate(ptr, 0, size);
         }
-        void setDataAndUpdate(GLubyte const *data, size_t offset, size_t size) {
-            this->setData(data, offset, size);
+        void setDataAndUpdate(GLubyte const *ptr, size_t offset, size_t size) {
+            this->setData(ptr, offset, size);
             this->update();
         }
+        template <typename T>
+        ForPointers<T> setData(T ptr, size_t size) {
+            this->setData(reinterpret_cast<GLubyte const *>(ptr), size);
+        }
+        template <typename T>
+        ForPointers<T> setData(T ptr, size_t offset, size_t size) {
+            this->setData(reinterpret_cast<GLubyte const *>(ptr), offset, size);
+        }
+        template <typename T>
+        ForPointers<T> setDataAndUpdate(T ptr, size_t size) {
+            this->setDataAndUpdate(reinterpret_cast<GLubyte const *>(ptr), size);
+        }
+        template <typename T>
+        ForPointers<T> setDataAndUpdate(T ptr, size_t offset, size_t size) {
+            this->setDataAndUpdate(reinterpret_cast<GLubyte const *>(ptr), offset, size);
+        }
 
-        template <typename T>
-        std::enable_if_t<std::is_pointer<T>::value, void> setData(T data, size_t size) {
-            this->setData(reinterpret_cast<GLubyte const *>(data), size);
-        }
-        template <typename T>
-        std::enable_if_t<std::is_pointer<T>::value, void> setData(T data, size_t offset, size_t size) {
-            this->setData(reinterpret_cast<GLubyte const *>(data), offset, size);
-        }
-        template <typename T>
-        std::enable_if_t<std::is_pointer<T>::value, void> setDataAndUpdate(T data, size_t size) {
-            this->setDataAndUpdate(reinterpret_cast<GLubyte const *>(data), size);
-        }
-        template <typename T>
-        std::enable_if_t<std::is_pointer<T>::value, void> setDataAndUpdate(T data, size_t offset, size_t size) {
-            this->setDataAndUpdate(reinterpret_cast<GLubyte const *>(data), offset, size);
-        }
 
+        /**
+         * These methods are meant for copying the provided data, using various sizes and
+         * offsets (offset is 0 when unspecified).
+         * The update variants will send allways send the data to the OpenGL driver, whereas the
+         * non-update variants will only send the data to the driver when used in an "unbuffered"
+         * subclass of GLBuffer.
+         */
         template <typename T>
-        std::enable_if_t<!std::is_pointer<T>::value, void> setData(T const &data, size_t size) {
+        NotForPointers<T> setData(T const &data, size_t size) {
             this->setData(reinterpret_cast<GLubyte const *>(&data), size);
         }
         template <typename T>
-        std::enable_if_t<!std::is_pointer<T>::value, void> setData(T const &data, size_t offset, size_t size) {
+        NotForPointers<T> setData(T const &data, size_t offset, size_t size) {
             this->setData(reinterpret_cast<GLubyte const *>(&data), offset, size);
         }
         template <typename T>
-        std::enable_if_t<!std::is_pointer<T>::value, void> setDataAndUpdate(T const &data, size_t size) {
+        NotForPointers<T> setDataAndUpdate(T const &data, size_t size) {
             this->setDataAndUpdate(reinterpret_cast<GLubyte const *>(&data), size);
         }
         template <typename T>
-        std::enable_if_t<!std::is_pointer<T>::value, void>
-        setDataAndUpdate(T const &data, size_t offset, size_t size) {
+        NotForPointers<T> setDataAndUpdate(T const &data, size_t offset, size_t size) {
             this->setDataAndUpdate(reinterpret_cast<GLubyte const *>(&data), offset, size);
         }
 
+        /**
+         * The value identifying the buffer on the OpenGL side.
+         */
         GLuint identifier() const {
             return _identifier;
         }
@@ -78,6 +123,9 @@ namespace CoreGL {
         GLuint _identifier = 0;
     };
 
+    /**
+     * A helper class with no particular behavior except for storing the buffer target and size.
+     */
     template <GLenum Target>
     class GLBufferTarget : public GLBuffer {
     public:
@@ -104,6 +152,14 @@ namespace CoreGL {
         GLsizei const _size;
     };
 
+
+    /**
+     * An invocation of one variant of the GLBufferedBuffer's setData methods will result in no data
+     * being sent to the OpenGL. You either need to call one of the setDataAndUpdate variants, or
+     * explicitely call the update method.
+     * On the other hand, you will always be able to quickly query the data contained in the buffer,
+     * and no copy other that the one you make will be involved.
+     */
     template <GLenum Target>
     class GLBufferedBuffer : public GLBufferTarget<Target> {
     public:
@@ -138,8 +194,14 @@ namespace CoreGL {
                                           std::max(_editedRange.second, size + offset));
         }
 
+        /**
+         * Retrieves the data cached in the buffer.
+         * Be careful that if one of the setData methods has been called and not subsequent call to
+         * update was made, then the data returned here will not reflect the data present in the
+         * OpenGL driver.
+         */
         GLubyte const *data() const {
-            return _buffer;
+            return &_buffer[0];
         }
 
     private:
@@ -147,6 +209,13 @@ namespace CoreGL {
         std::pair<size_t, size_t> _editedRange;
     };
 
+    /**
+     * A GLUnbufferedBuffer has the opposite behavior of GLBufferedBuffer regarding when the data is
+     * sent to the OpenGL driver: every setData methods will behave exactly as their
+     * setDataAndUpdate counterpart.
+     * This immediate copy means that there are no quick way of retrieving the data conained in the
+     * GL buffer.
+     */
     template <GLenum Target>
     class GLUnbufferedBuffer : public GLBufferTarget<Target> {
     public:
@@ -168,6 +237,9 @@ namespace CoreGL {
         }
     };
 
+    /**
+     * A buffered GLBuffer specifically meant for containg shaders' uniform buffers.
+     */
     class UniformBuffer : public GLBufferedBuffer<GL_UNIFORM_BUFFER> {
     public:
         using GLBuffer::setData;
@@ -177,6 +249,9 @@ namespace CoreGL {
 
         virtual ~UniformBuffer() = default;
 
+        /**
+         * The binding ID of the buffer in the shader.
+         */
         GLint bindingPoint() const {
             return _bindingPoint;
         }
@@ -189,8 +264,8 @@ namespace CoreGL {
         GLint _bindingPoint = -1;
     };
 
-    typedef GLUnbufferedBuffer<GL_ARRAY_BUFFER> VertexBuffer;
-    typedef GLUnbufferedBuffer<GL_ELEMENT_ARRAY_BUFFER> IndexBuffer;
+    using VertexBuffer = GLUnbufferedBuffer<GL_ARRAY_BUFFER>;
+    using IndexBuffer = GLUnbufferedBuffer<GL_ELEMENT_ARRAY_BUFFER>;
 }
 
 template <>
