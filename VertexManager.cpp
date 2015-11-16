@@ -24,18 +24,18 @@ namespace CoreGL {
     static constexpr size_t _buffersCount = 32;
     static constexpr size_t _bufferVertices = 3 * 400;
 
-    vec4 const Couleur::noir(0, 0, 0, 1);
-    vec4 const Couleur::gris(0.5, 0.5, 0.5, 1);
-    vec4 const Couleur::grisClair(0.8, 0.8, 0.8, 1);
-    vec4 const Couleur::grisFonce(0.3, 0.3, 0.3, 1);
-    vec4 const Couleur::blanc(1, 1, 1, 1);
-    vec4 const Couleur::rouge(1, 0, 0, 1);
-    vec4 const Couleur::vert(0, 1, 0, 1);
-    vec4 const Couleur::bleu(0, 0, 1, 1);
-    vec4 const Couleur::jaune(1, 1, 0, 1);
-    vec4 const Couleur::transparent(0, 0, 0, 0);
+    vec4 const Color::black(0, 0, 0, 1);
+    vec4 const Color::grey(0.5, 0.5, 0.5, 1);
+    vec4 const Color::lightGrey(0.8, 0.8, 0.8, 1);
+    vec4 const Color::darkGrey(0.3, 0.3, 0.3, 1);
+    vec4 const Color::white(1, 1, 1, 1);
+    vec4 const Color::red(1, 0, 0, 1);
+    vec4 const Color::green(0, 1, 0, 1);
+    vec4 const Color::blue(0, 0, 1, 1);
+    vec4 const Color::yellow(1, 1, 0, 1);
+    vec4 const Color::transparent(0, 0, 0, 0);
 
-    vec4 Couleur::makeFromCouleur(vec4 const &vec, vec4::value_type alpha) {
+    vec4 Color::makeFromColor(vec4 const &vec, vec4::value_type alpha) {
         return vec4{vec.r, vec.g, vec.b, alpha};
     }
 
@@ -52,7 +52,7 @@ namespace CoreGL {
 
         size_t _nbSommets = 0;
         std::stack<vec4::value_type> _opacite;
-        vec4 _teinte = Couleur::blanc;
+        vec4 _teinte = Color::white;
 
         void init() {
             _lineBuffer = std::make_unique<VertexBuffer>(2 * (3 + 4) * sizeof(GLfloat), nullptr, GL_STREAM_DRAW);

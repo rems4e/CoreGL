@@ -46,8 +46,6 @@ namespace CoreGL {
 
         static ShaderProgram &orthoTex();
 
-        static ShaderProgram &blur(float radius);
-
         void setUniform(char const *uniform, GLint v);
 
         void setUniform(char const *uniform, float v);
@@ -119,7 +117,7 @@ namespace CoreGL {
         ShaderProgram &_that;
         GLint _id;
         std::shared_ptr<Shader> _shaders[ShaderTypesCount] = {{nullptr, ShaderDeleter()},
-                                                                      {nullptr, ShaderDeleter()}};
+                                                              {nullptr, ShaderDeleter()}};
         std::vector<Sampler> _samplers;
 
         mutable std::unordered_map<std::string, GLint> _parametres;
@@ -159,9 +157,6 @@ namespace CoreGL {
 
     ShaderProgram &ShaderProgram::orthoTex() {
         return Pimpl::orthoTex();
-    }
-    ShaderProgram &ShaderProgram::blur(float radius) {
-        return Pimpl::blur(radius);
     }
     void ShaderProgram::setUniform(char const *uniform, GLint v) {
         return _pimpl->setUniform(uniform, v);
@@ -382,21 +377,12 @@ namespace CoreGL {
 
     ShaderProgram &ShaderProgram::Pimpl::orthoTex() {
         if(!_orthoTex) {
-            _orthoTex = std::make_unique<ShaderProgram>(CoreGL::resourcesPath() + "shaders/2D.vert",
-                                                 CoreGL::resourcesPath() + "shaders/2D.frag");
+            _orthoTex =
+            std::make_unique<ShaderProgram>(CoreGL::resourcesPath() + "shaders/2D.vert",
+                                            CoreGL::resourcesPath() + "shaders/2D.frag");
         }
 
         return *_orthoTex;
-    }
-
-    ShaderProgram &ShaderProgram::Pimpl::blur(float radius) {
-        if(!_blur) {
-            _blur = std::make_unique<ShaderProgram>(CoreGL::resourcesPath() + "shaders/2D.vert",
-                                             CoreGL::resourcesPath() + "shaders/flou.frag");
-        }
-        _blur->setUniform("_rayon", radius);
-
-        return *_blur;
     }
 
     void ShaderProgram::Pimpl::setUniform(char const *param, GLint v) {
@@ -528,7 +514,7 @@ namespace CoreGL {
     }
 
     void ShaderProgram::Pimpl::pushBuffer(std::string const &uniformBlockName,
-                                   std::shared_ptr<UniformBuffer> const &buffer) {
+                                          std::shared_ptr<UniformBuffer> const &buffer) {
         buffer->bind();
         GLuint index = glGetUniformBlockIndex(_id, uniformBlockName.c_str());
         _buffers.push_back(std::make_tuple(index, false, buffer));
@@ -600,9 +586,9 @@ namespace CoreGL {
     }
 
     std::string ShaderProgram::Pimpl::loadShader(std::string const &chemin,
-                                          GLenum type,
-                                          std::vector<Sampler> &samplers,
-                                          std::vector<PreprocessorDefine> const &preprocessorDefines) {
+                                                 GLenum type,
+                                                 std::vector<Sampler> &samplers,
+                                                 std::vector<PreprocessorDefine> const &preprocessorDefines) {
         std::ifstream fShad(chemin.c_str(), std::ios::in);
         if(!fShad) {
             std::cerr << "Shader doesn't exist : " << chemin << std::endl;
@@ -624,8 +610,8 @@ namespace CoreGL {
     }
 
     std::string ShaderProgram::Pimpl::preprocess(std::string shadSource,
-                                          std::string const &shaderPath,
-                                          std::vector<PreprocessorDefine> const &preprocessorDefines) {
+                                                 std::string const &shaderPath,
+                                                 std::vector<PreprocessorDefine> const &preprocessorDefines) {
         auto it = shadSource.find('\n');
         if(it == std::string::npos) {
             std::cerr << "Bad shader : " << shaderPath << std::endl;
@@ -706,9 +692,9 @@ namespace CoreGL {
     }
 
     void ShaderProgram::Pimpl::getSamplers(std::string const &shaderSource,
-                                    GLenum shaderType,
-                                    std::string const &shaderPath,
-                                    std::vector<Sampler> &samplers) {
+                                           GLenum shaderType,
+                                           std::string const &shaderPath,
+                                           std::vector<Sampler> &samplers) {
         if(shaderType == GL_FRAGMENT_SHADER) {
             auto it = shaderSource.begin();
             std::string pattern = "\nuniform sampler";

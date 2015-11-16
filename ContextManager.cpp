@@ -139,6 +139,8 @@ namespace CoreGL {
 
         ShaderPrivate::frameConstantsUpdate();
 
+        _context->onInit();
+
         resetPointer();
         setPointerVisibility(false);
         _context->showWindow();

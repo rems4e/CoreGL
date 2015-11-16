@@ -17,10 +17,10 @@
 
 namespace CoreGL {
 
-    namespace Couleur {
-        extern vec4 const noir, gris, grisClair, grisFonce, blanc, rouge, vert, bleu, jaune, transparent;
+    namespace Color {
+        extern vec4 const black, grey, lightGrey, darkGrey, white, red, green, blue, yellow, transparent;
 
-        vec4 makeFromCouleur(vec4 const &vec, vec4::value_type alpha);
+        vec4 makeFromColor(vec4 const &vec, vec4::value_type alpha);
     }
 
     namespace VertexManager {
@@ -29,7 +29,7 @@ namespace CoreGL {
         void pushAlpha(vec4::value_type o);
         void popAlpha();
 
-        // Teinte de l'image : Couleur::blanc -> image non teintée.
+        // Teinte de l'image : Color::white -> image non teintée.
         vec4 const &hue();
         void setHue(vec4 const &c);
 

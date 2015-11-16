@@ -25,9 +25,10 @@ namespace CoreGL {
 
         inline TextureBase(GLenum target, Sampling sampling)
                 : _target(target)
-                , _sampling(sampling) {
+                , _sampling(sampling)
+                , _depth(4)
+                , _size{} {
             glGenTextures(1, &_tex);
-            _depth = 4;
         }
 
         ~TextureBase();
@@ -38,13 +39,11 @@ namespace CoreGL {
         GLuint _tex = 0;
         GLenum _target = GL_TEXTURE_2D;
         Texture::Sampling _sampling;
-        std::string _file = std::string();
         ivec2 _size;
         int _depth = 4;
         bool _depthTexture = false;
 
         static std::unordered_map<std::pair<GLenum, Texture::Sampling>, GLuint> _samplers;
-        static std::unordered_map<std::string, std::weak_ptr<TextureBase>> _textures;
         static GLfloat _anisotropy;
 
         static GLuint getSampler(GLenum target, Texture::Sampling sampling) {
@@ -69,7 +68,7 @@ namespace CoreGL {
                                 glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
                                 glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
                                 break;
-                            case NumSampling:
+                            case SamplingModesCount:
                                 break;
                         }
                         break;
@@ -91,7 +90,7 @@ namespace CoreGL {
                                 glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
                                 glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
                                 break;
-                            case NumSampling:
+                            case SamplingModesCount:
                                 break;
                         }
                     }
@@ -105,7 +104,7 @@ namespace CoreGL {
                                 glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
                                 glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
                             case StandardSampling:
-                            case NumSampling:
+                            case SamplingModesCount:
                                 break;
                         }
                     }
@@ -116,27 +115,20 @@ namespace CoreGL {
         }
     };
 
-    typedef Texture::TextureBase TextureBase;
+    using TextureBase = Texture::TextureBase;
 }
 
 size_t std::hash<std::pair<GLenum, CoreGL::Texture::Sampling>>::
 operator()(std::pair<GLenum, CoreGL::Texture::Sampling> const &tex) const noexcept {
     static std::hash<uint64_t> hash;
-    return hash(tex.second + (tex.first << CoreGL::Texture::NumSampling));
+    return hash(tex.second + (tex.first << CoreGL::Texture::SamplingModesCount));
 }
 
 namespace CoreGL {
 
-    std::unordered_map<std::string, std::weak_ptr<TextureBase>> TextureBase::_textures;
     std::unordered_map<std::pair<GLenum, Texture::Sampling>, GLuint> TextureBase::_samplers;
 
     GLfloat TextureBase::_anisotropy = 1.0f;
-
-    void Texture::SharedTextureDeleter::operator()(TextureBase *tex) {
-        if(tex && !tex->_file.empty())
-            TextureBase::_textures.erase(tex->_file);
-        delete tex;
-    }
 
     TextureBase::~TextureBase() {
         if(CoreGL::initialized())
@@ -263,10 +255,6 @@ namespace CoreGL {
 
     std::unique_ptr<GLubyte[]> Texture::pixels() const {
         return _base->pixels();
-    }
-
-    std::string const &Texture::file() const {
-        return _base->_file;
     }
 
     GLuint Texture::tex() const {

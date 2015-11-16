@@ -41,6 +41,12 @@ namespace CoreGL {
         virtual void init() = 0;
 
         /**
+         * Called when the GL extensions are loaded. You should perform here any initialization
+         * action that involves calls to the OpenGL API.
+         */
+        virtual void onInit() = 0;
+
+        /**
          * This methods is in charge of resizing the OpenGL context.
          */
         virtual void updateResolution() = 0;
