@@ -21,7 +21,7 @@
 
 namespace CoreGL {
 
-    static constexpr size_t _buffersCount = 32;
+    static constexpr size_t _buffersCount = 8;
     static constexpr size_t _bufferVertices = 3 * 400;
 
     vec4 const Color::black(0, 0, 0, 1);
@@ -198,25 +198,6 @@ namespace CoreGL {
             _sharedVAO->disableVertexAttribArray(NORMAL_LOCATION);
 
         _sharedVAO->endEditing();
-    }
-
-    void VertexManager::pushLine(vec3 const &depart, vec3 const &arrivee, vec4 const &c) {
-        _sharedVAO->beginEditing();
-        _lineBuffer->setData(depart, 0, 3 * sizeof(GLfloat));
-        _lineBuffer->setData(c, 3 * sizeof(GLfloat), 4 * sizeof(GLfloat));
-        _lineBuffer->setData(arrivee, (3 + 4) * sizeof(GLfloat), 3 * sizeof(GLfloat));
-        _lineBuffer->setData(c, (3 + 4 + 3) * sizeof(GLfloat), 4 * sizeof(GLfloat));
-        _sharedVAO->endEditing();
-
-        glLineWidth(3);
-        VertexManager::drawVertices(GL_LINE,
-                                    2,
-                                    *_lineBuffer,
-                                    0,
-                                    VertexManager::npos,
-                                    3 * sizeof(GLfloat),
-                                    VertexManager::npos,
-                                    (3 + 4) * sizeof(GLfloat));
     }
 
     void VertexManager::flush() {
