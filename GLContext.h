@@ -3,11 +3,10 @@
 //  CoreGL
 //
 //  Created by Rémi on 10/11/2015.
-//  Copyright © 2015 Rémi. All rights reserved.
 //
 
-#ifndef GLContext_h
-#define GLContext_h
+#ifndef COREGL_GL_CONTEXT_H
+#define COREGL_GL_CONTEXT_H
 
 #include "GL.h"
 #include "Geometry.h"

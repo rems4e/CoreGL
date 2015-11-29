@@ -1,13 +1,13 @@
 //
 //  VertexManager.h
-//  RPG 3D
+//  CoreGL
 //
 //  Created by Rémi on 18/07/13.
 //
 //
 
-#ifndef __RPG_3D__VertexManager__
-#define __RPG_3D__VertexManager__
+#ifndef COREGL_VERTEX_MANAGER_H
+#define COREGL_VERTEX_MANAGER_H
 
 #include "Framebuffer.h"
 #include "Geometry.h"

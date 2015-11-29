@@ -1,13 +1,13 @@
 //
 //  GLBuffer.h
-//  RPG 3D
+//  CoreGL
 //
 //  Created by Rémi on 02/07/13.
 //
 //
 
-#ifndef __RPG_3D__GLBuffer__
-#define __RPG_3D__GLBuffer__
+#ifndef COREGL_GL_BUFFER_H
+#define COREGL_GL_BUFFER_H
 
 #include "GL.h"
 #include <vector>

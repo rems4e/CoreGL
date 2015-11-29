@@ -1,9 +1,8 @@
 //
 //  Texture.cpp
-//  Projet2MIC
+//  CoreGL
 //
 //  Created by Rémi on 17/08/12.
-//  Copyright (c) 2012 Rémi Saurel. All rights reserved.
 //
 
 #include "Texture.h"

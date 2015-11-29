@@ -1,6 +1,6 @@
 //
 //  VertexArrayObject.cpp
-//  RPG 3D
+//  CoreGL
 //
 //  Created by Rémi on 01/09/13.
 //

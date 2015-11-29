@@ -1,13 +1,12 @@
 //
 //  Texture.h
-//  Projet2MIC
+//  CoreGL
 //
 //  Created by Rémi on 17/08/12.
-//  Copyright (c) 2012 Rémi Saurel. All rights reserved.
 //
 
-#ifndef EN_TETE_TEXTURE
-#define EN_TETE_TEXTURE
+#ifndef COREGL_TEXTURE_H
+#define COREGL_TEXTURE_H
 
 #include "GL.h"
 #include <string>

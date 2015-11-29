@@ -1,15 +1,13 @@
 //
 //  Shader.h
-//  Projet2MIC
+//  CoreGL
 //
-//  Créé par Marc Promé et Rémi Saurel.
-//  Ce fichier et son contenu sont librement distribuables, modifiables et utilisables pour toute
-//  œuvre non commerciale,
-//  à condition d'en citer les auteurs.
+//  Created by Rémi Saurel on 11/04/12.
+//  Additional contributor (2012): Marc Promé
 //
 
-#ifndef Projet2MIC_Shader_h
-#define Projet2MIC_Shader_h
+#ifndef COREGL_SHADER_H
+#define COREGL_SHADER_H
 
 #include <unordered_map>
 #include <string>

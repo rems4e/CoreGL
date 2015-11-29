@@ -1,15 +1,15 @@
 //
 //  GL.c
-//  RPG 3D
+//  CoreGL
 //
 //  Created by Rémi on 29/06/13.
 //
 //
 
 // For DEBUG_GL
-#define GL_C
+#define COREGL_GL_C
 #include "GL.h"
-#undef GL_C
+#undef COREGL_GL_C
 
 #include <stdio.h>
 #include <GL/glew.h>
@@ -137,7 +137,14 @@ void _gl_debug_error_glTexParameteriv(GLenum target, GLenum pname, const GLint *
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glTexImage1D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid *pixels) {
+void _gl_debug_error_glTexImage1D(GLenum target,
+                                  GLint level,
+                                  GLint internalformat,
+                                  GLsizei width,
+                                  GLint border,
+                                  GLenum format,
+                                  GLenum type,
+                                  const GLvoid *pixels) {
     glTexImage1D(target, level, internalformat, width, border, format, type, pixels);
     CHECK_GL_ERROR(__FUNCTION__);
 }
@@ -349,7 +356,14 @@ void _gl_debug_error_glCopyTexImage1D(GLenum target, GLint level, GLenum interna
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glCopyTexImage2D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border) {
+void _gl_debug_error_glCopyTexImage2D(GLenum target,
+                                      GLint level,
+                                      GLenum internalformat,
+                                      GLint x,
+                                      GLint y,
+                                      GLsizei width,
+                                      GLsizei height,
+                                      GLint border) {
     glCopyTexImage2D(target, level, internalformat, x, y, width, height, border);
     CHECK_GL_ERROR(__FUNCTION__);
 }
@@ -359,12 +373,25 @@ void _gl_debug_error_glCopyTexSubImage1D(GLenum target, GLint level, GLint xoffs
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glCopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height) {
+void _gl_debug_error_glCopyTexSubImage2D(GLenum target,
+                                         GLint level,
+                                         GLint xoffset,
+                                         GLint yoffset,
+                                         GLint x,
+                                         GLint y,
+                                         GLsizei width,
+                                         GLsizei height) {
     glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const GLvoid *pixels) {
+void _gl_debug_error_glTexSubImage1D(GLenum target,
+                                     GLint level,
+                                     GLint xoffset,
+                                     GLsizei width,
+                                     GLenum format,
+                                     GLenum type,
+                                     const GLvoid *pixels) {
     glTexSubImage1D(target, level, xoffset, width, format, type, pixels);
     CHECK_GL_ERROR(__FUNCTION__);
 }
@@ -448,7 +475,15 @@ void _gl_debug_error_glTexSubImage3D(GLenum target,
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glCopyTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height) {
+void _gl_debug_error_glCopyTexSubImage3D(GLenum target,
+                                         GLint level,
+                                         GLint xoffset,
+                                         GLint yoffset,
+                                         GLint zoffset,
+                                         GLint x,
+                                         GLint y,
+                                         GLsizei width,
+                                         GLsizei height) {
     glCopyTexSubImage3D(target, level, xoffset, yoffset, zoffset, x, y, width, height);
     CHECK_GL_ERROR(__FUNCTION__);
 }
@@ -527,7 +562,13 @@ void _gl_debug_error_glCompressedTexSubImage2D(GLenum target,
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glCompressedTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, const GLvoid *data) {
+void _gl_debug_error_glCompressedTexSubImage1D(GLenum target,
+                                               GLint level,
+                                               GLint xoffset,
+                                               GLsizei width,
+                                               GLenum format,
+                                               GLsizei imageSize,
+                                               const GLvoid *data) {
     glCompressedTexSubImage1D(target, level, xoffset, width, format, imageSize, data);
     CHECK_GL_ERROR(__FUNCTION__);
 }
@@ -754,12 +795,24 @@ void _gl_debug_error_glEnableVertexAttribArray(GLuint index) {
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glGetActiveAttrib(GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name) {
+void _gl_debug_error_glGetActiveAttrib(GLuint program,
+                                       GLuint index,
+                                       GLsizei bufSize,
+                                       GLsizei *length,
+                                       GLint *size,
+                                       GLenum *type,
+                                       GLchar *name) {
     glGetActiveAttrib(program, index, bufSize, length, size, type, name);
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glGetActiveUniform(GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name) {
+void _gl_debug_error_glGetActiveUniform(GLuint program,
+                                        GLuint index,
+                                        GLsizei bufSize,
+                                        GLsizei *length,
+                                        GLint *size,
+                                        GLenum *type,
+                                        GLchar *name) {
     glGetActiveUniform(program, index, bufSize, length, size, type, name);
     CHECK_GL_ERROR(__FUNCTION__);
 }
@@ -1147,7 +1200,12 @@ void _gl_debug_error_glVertexAttrib4usv(GLuint index, const GLushort *v) {
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer) {
+void _gl_debug_error_glVertexAttribPointer(GLuint index,
+                                           GLint size,
+                                           GLenum type,
+                                           GLboolean normalized,
+                                           GLsizei stride,
+                                           const GLvoid *pointer) {
     glVertexAttribPointer(index, size, type, normalized, stride, pointer);
     CHECK_GL_ERROR(__FUNCTION__);
 }
@@ -1590,7 +1648,12 @@ void _gl_debug_error_glFramebufferTexture2D(GLenum target, GLenum attachment, GL
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glFramebufferTexture3D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level, GLint zoffset) {
+void _gl_debug_error_glFramebufferTexture3D(GLenum target,
+                                            GLenum attachment,
+                                            GLenum textarget,
+                                            GLuint texture,
+                                            GLint level,
+                                            GLint zoffset) {
     glFramebufferTexture3D(target, attachment, textarget, texture, level, zoffset);
     CHECK_GL_ERROR(__FUNCTION__);
 }
@@ -1624,7 +1687,11 @@ void _gl_debug_error_glBlitFramebuffer(GLint srcX0,
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glRenderbufferStorageMultisample(GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height) {
+void _gl_debug_error_glRenderbufferStorageMultisample(GLenum target,
+                                                      GLsizei samples,
+                                                      GLenum internalformat,
+                                                      GLsizei width,
+                                                      GLsizei height) {
     glRenderbufferStorageMultisample(target, samples, internalformat, width, height);
     CHECK_GL_ERROR(__FUNCTION__);
 }
@@ -1673,12 +1740,20 @@ void _gl_debug_error_glGetUniformIndices(GLuint program, GLsizei uniformCount, c
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glGetActiveUniformsiv(GLuint program, GLsizei uniformCount, const GLuint *uniformIndices, GLenum pname, GLint *params) {
+void _gl_debug_error_glGetActiveUniformsiv(GLuint program,
+                                           GLsizei uniformCount,
+                                           const GLuint *uniformIndices,
+                                           GLenum pname,
+                                           GLint *params) {
     glGetActiveUniformsiv(program, uniformCount, uniformIndices, pname, params);
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glGetActiveUniformName(GLuint program, GLuint uniformIndex, GLsizei bufSize, GLsizei *length, GLchar *uniformName) {
+void _gl_debug_error_glGetActiveUniformName(GLuint program,
+                                            GLuint uniformIndex,
+                                            GLsizei bufSize,
+                                            GLsizei *length,
+                                            GLchar *uniformName) {
     glGetActiveUniformName(program, uniformIndex, bufSize, length, uniformName);
     CHECK_GL_ERROR(__FUNCTION__);
 }
@@ -1695,7 +1770,11 @@ void _gl_debug_error_glGetActiveUniformBlockiv(GLuint program, GLuint uniformBlo
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glGetActiveUniformBlockName(GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei *length, GLchar *uniformBlockName) {
+void _gl_debug_error_glGetActiveUniformBlockName(GLuint program,
+                                                 GLuint uniformBlockIndex,
+                                                 GLsizei bufSize,
+                                                 GLsizei *length,
+                                                 GLchar *uniformBlockName) {
     glGetActiveUniformBlockName(program, uniformBlockIndex, bufSize, length, uniformBlockName);
     CHECK_GL_ERROR(__FUNCTION__);
 }
@@ -1705,7 +1784,11 @@ void _gl_debug_error_glUniformBlockBinding(GLuint program, GLuint uniformBlockIn
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glCopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size) {
+void _gl_debug_error_glCopyBufferSubData(GLenum readTarget,
+                                         GLenum writeTarget,
+                                         GLintptr readOffset,
+                                         GLintptr writeOffset,
+                                         GLsizeiptr size) {
     glCopyBufferSubData(readTarget, writeTarget, readOffset, writeOffset, size);
     CHECK_GL_ERROR(__FUNCTION__);
 }
@@ -1715,12 +1798,23 @@ void _gl_debug_error_glDrawElementsBaseVertex(GLenum mode, GLsizei count, GLenum
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glDrawRangeElementsBaseVertex(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, GLvoid *indices, GLint basevertex) {
+void _gl_debug_error_glDrawRangeElementsBaseVertex(GLenum mode,
+                                                   GLuint start,
+                                                   GLuint end,
+                                                   GLsizei count,
+                                                   GLenum type,
+                                                   GLvoid *indices,
+                                                   GLint basevertex) {
     glDrawRangeElementsBaseVertex(mode, start, end, count, type, indices, basevertex);
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glDrawElementsInstancedBaseVertex(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLsizei primcount, GLint basevertex) {
+void _gl_debug_error_glDrawElementsInstancedBaseVertex(GLenum mode,
+                                                       GLsizei count,
+                                                       GLenum type,
+                                                       const GLvoid *indices,
+                                                       GLsizei primcount,
+                                                       GLint basevertex) {
     glDrawElementsInstancedBaseVertex(mode, count, type, indices, primcount, basevertex);
     CHECK_GL_ERROR(__FUNCTION__);
 }
@@ -1781,7 +1875,12 @@ void _gl_debug_error_glGetSynciv(GLsync sync, GLenum pname, GLsizei bufSize, GLs
     CHECK_GL_ERROR(__FUNCTION__);
 }
 
-void _gl_debug_error_glTexImage2DMultisample(GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations) {
+void _gl_debug_error_glTexImage2DMultisample(GLenum target,
+                                             GLsizei samples,
+                                             GLint internalformat,
+                                             GLsizei width,
+                                             GLsizei height,
+                                             GLboolean fixedsamplelocations) {
     glTexImage2DMultisample(target, samples, internalformat, width, height, fixedsamplelocations);
     CHECK_GL_ERROR(__FUNCTION__);
 }

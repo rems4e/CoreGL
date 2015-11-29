@@ -1,13 +1,13 @@
 //
 //  RenderTarget.h
-//  RPG 3D
+//  CoreGL
 //
 //  Created by Rémi on 17/07/13.
 //
 //
 
-#ifndef __RPG_3D__RenderTarget__
-#define __RPG_3D__RenderTarget__
+#ifndef COREGL_RENDER_TARGET_H
+#define COREGL_RENDER_TARGET_H
 
 #include <stack>
 #include "Geometry.h"

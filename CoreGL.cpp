@@ -3,7 +3,6 @@
 //  CoreGL
 //
 //  Created by Rémi on 11/11/2015.
-//  Copyright © 2015 Rémi. All rights reserved.
 //
 
 #include "CoreGL.h"

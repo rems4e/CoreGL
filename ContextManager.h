@@ -1,13 +1,12 @@
 //
-//  Affichage.h
-//  Projet2MIC
+//  ContextManager.h
+//  CoreGL
 //
 //  Created by Rémi on 12/08/12.
-//  Copyright (c) 2012 Rémi Saurel. All rights reserved.
 //
 
-#ifndef EN_TETE_AFFICHAGE
-#define EN_TETE_AFFICHAGE
+#ifndef COREGL_CONTEXT_MANAGER_H
+#define COREGL_CONTEXT_MANAGER_H
 
 #include "Geometry.h"
 #include <string>

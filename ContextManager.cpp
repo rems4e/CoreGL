@@ -1,9 +1,8 @@
 //
-//  Affichage.cpp
-//  Projet2MIC
+//  ContextManager.cpp
+//  CoreGL
 //
 //  Created by Rémi on 12/08/12.
-//  Copyright (c) 2012 Rémi Saurel. All rights reserved.
 //
 
 #include "ContextManager.h"

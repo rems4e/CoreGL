@@ -1,11 +1,9 @@
 //
-//  Geometrie.cpp
-//  Projet2MIC
+//  Geometry.cpp
+//  CoreGL
 //
-//  Créé par Marc Promé et Rémi Saurel.
-//  Ce fichier et son contenu sont librement distribuables, modifiables et utilisables pour toute
-//  œuvre non commerciale,
-//  à condition d'en citer les auteurs.
+//  Created by Rémi on 07/06/08.
+//  Additional contributor (2012): Marc Promé
 //
 
 

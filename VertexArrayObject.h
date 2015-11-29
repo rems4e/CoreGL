@@ -1,13 +1,13 @@
 //
 //  VertexArrayObject.h
-//  RPG 3D
+//  CoreGL
 //
 //  Created by Rémi on 01/09/13.
 //
 //
 
-#ifndef __RPG_3D__VertexArrayObject__
-#define __RPG_3D__VertexArrayObject__
+#ifndef COREGL_VERTEX_ARRAY_OBJECT_H
+#define COREGL_VERTEX_ARRAY_OBJECT_H
 
 #include "GL.h"
 

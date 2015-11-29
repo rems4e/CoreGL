@@ -1,13 +1,12 @@
 //
-//  CoreGL.hpp
+//  CoreGL.h
 //  CoreGL
 //
 //  Created by Rémi on 11/11/2015.
-//  Copyright © 2015 Rémi. All rights reserved.
 //
 
-#ifndef CoreGL_hpp
-#define CoreGL_hpp
+#ifndef COREGL_COREGL_H
+#define COREGL_COREGL_H
 
 #include <string>
 #include <si-units/Units.h>

@@ -1,6 +1,6 @@
 //
 //  RenderTarget.cpp
-//  RPG 3D
+//  CoreGL
 //
 //  Created by Rémi on 17/07/13.
 //

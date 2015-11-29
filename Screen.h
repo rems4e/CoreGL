@@ -1,13 +1,13 @@
 //
 //  Screen.h
-//  RPG 3D
+//  CoreGL
 //
 //  Created by Rémi on 18/07/13.
 //
 //
 
-#ifndef SCREEN_H
-#define SCREEN_H
+#ifndef COREGL_SCREEN_H
+#define COREGL_SCREEN_H
 
 #include "RenderTarget.h"
 #include "ContextManager.h"

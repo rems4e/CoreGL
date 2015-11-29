@@ -1,13 +1,13 @@
 //
 //  GL.h
-//  RPG 3D
+//  CoreGL
 //
 //  Created by Rémi on 19/08/12.
 //
 //
 
-#ifndef RPG_3D_GL_h
-#define RPG_3D_GL_h
+#ifndef COREGL_GL_H
+#define COREGL_GL_H
 
 #ifdef __cplusplus
 extern "C" void myGlewInit();
@@ -17,7 +17,7 @@ extern "C" void myGlewInit();
 
 #define DEBUG_GL
 
-#ifndef GL_C
+#ifndef COREGL_GL_C
 
 #ifndef DEBUG_GL
 
@@ -90,7 +90,14 @@ void _gl_debug_error_glTexParameteri(GLenum target, GLenum pname, GLint param);
 void _gl_debug_error_glTexParameteriv(GLenum target, GLenum pname, const GLint *params);
 
 #define glTexImage1D _gl_debug_error_glTexImage1D
-void _gl_debug_error_glTexImage1D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid *pixels);
+void _gl_debug_error_glTexImage1D(GLenum target,
+                                  GLint level,
+                                  GLint internalformat,
+                                  GLsizei width,
+                                  GLint border,
+                                  GLenum format,
+                                  GLenum type,
+                                  const GLvoid *pixels);
 
 #define glTexImage2D _gl_debug_error_glTexImage2D
 void _gl_debug_error_glTexImage2D(GLenum target,
@@ -218,16 +225,36 @@ void _gl_debug_error_glPolygonOffset(GLfloat factor, GLfloat units);
 void _gl_debug_error_glCopyTexImage1D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border);
 
 #define glCopyTexImage2D _gl_debug_error_glCopyTexImage2D
-void _gl_debug_error_glCopyTexImage2D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border);
+void _gl_debug_error_glCopyTexImage2D(GLenum target,
+                                      GLint level,
+                                      GLenum internalformat,
+                                      GLint x,
+                                      GLint y,
+                                      GLsizei width,
+                                      GLsizei height,
+                                      GLint border);
 
 #define glCopyTexSubImage1D _gl_debug_error_glCopyTexSubImage1D
 void _gl_debug_error_glCopyTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width);
 
 #define glCopyTexSubImage2D _gl_debug_error_glCopyTexSubImage2D
-void _gl_debug_error_glCopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height);
+void _gl_debug_error_glCopyTexSubImage2D(GLenum target,
+                                         GLint level,
+                                         GLint xoffset,
+                                         GLint yoffset,
+                                         GLint x,
+                                         GLint y,
+                                         GLsizei width,
+                                         GLsizei height);
 
 #define glTexSubImage1D _gl_debug_error_glTexSubImage1D
-void _gl_debug_error_glTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const GLvoid *pixels);
+void _gl_debug_error_glTexSubImage1D(GLenum target,
+                                     GLint level,
+                                     GLint xoffset,
+                                     GLsizei width,
+                                     GLenum format,
+                                     GLenum type,
+                                     const GLvoid *pixels);
 
 #define glTexSubImage2D _gl_debug_error_glTexSubImage2D
 void _gl_debug_error_glTexSubImage2D(GLenum target,
@@ -287,7 +314,15 @@ void _gl_debug_error_glTexSubImage3D(GLenum target,
                                      const GLvoid *pixels);
 
 #define glCopyTexSubImage3D _gl_debug_error_glCopyTexSubImage3D
-void _gl_debug_error_glCopyTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height);
+void _gl_debug_error_glCopyTexSubImage3D(GLenum target,
+                                         GLint level,
+                                         GLint xoffset,
+                                         GLint yoffset,
+                                         GLint zoffset,
+                                         GLint x,
+                                         GLint y,
+                                         GLsizei width,
+                                         GLsizei height);
 
 #define glActiveTexture _gl_debug_error_glActiveTexture
 void _gl_debug_error_glActiveTexture(GLenum texture);
@@ -350,7 +385,13 @@ void _gl_debug_error_glCompressedTexSubImage2D(GLenum target,
                                                const GLvoid *data);
 
 #define glCompressedTexSubImage1D _gl_debug_error_glCompressedTexSubImage1D
-void _gl_debug_error_glCompressedTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, const GLvoid *data);
+void _gl_debug_error_glCompressedTexSubImage1D(GLenum target,
+                                               GLint level,
+                                               GLint xoffset,
+                                               GLsizei width,
+                                               GLenum format,
+                                               GLsizei imageSize,
+                                               const GLvoid *data);
 
 #define glGetCompressedTexImage _gl_debug_error_glGetCompressedTexImage
 void _gl_debug_error_glGetCompressedTexImage(GLenum target, GLint level, GLvoid *img);
@@ -362,7 +403,11 @@ void _gl_debug_error_glBlendFuncSeparate(GLenum sfactorRGB, GLenum dfactorRGB, G
 void _gl_debug_error_glMultiDrawArrays(GLenum mode, const GLint *first, const GLsizei *count, GLsizei primcount);
 
 #define glMultiDrawElements _gl_debug_error_glMultiDrawElements
-void _gl_debug_error_glMultiDrawElements(GLenum mode, const GLsizei *count, GLenum type, const GLvoid *const *indices, GLsizei primcount);
+void _gl_debug_error_glMultiDrawElements(GLenum mode,
+                                         const GLsizei *count,
+                                         GLenum type,
+                                         const GLvoid *const *indices,
+                                         GLsizei primcount);
 
 #define glPointParameterf _gl_debug_error_glPointParameterf
 void _gl_debug_error_glPointParameterf(GLenum pname, GLfloat param);
@@ -479,10 +524,22 @@ void _gl_debug_error_glDisableVertexAttribArray(GLuint index);
 void _gl_debug_error_glEnableVertexAttribArray(GLuint index);
 
 #define glGetActiveAttrib _gl_debug_error_glGetActiveAttrib
-void _gl_debug_error_glGetActiveAttrib(GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name);
+void _gl_debug_error_glGetActiveAttrib(GLuint program,
+                                       GLuint index,
+                                       GLsizei bufSize,
+                                       GLsizei *length,
+                                       GLint *size,
+                                       GLenum *type,
+                                       GLchar *name);
 
 #define glGetActiveUniform _gl_debug_error_glGetActiveUniform
-void _gl_debug_error_glGetActiveUniform(GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name);
+void _gl_debug_error_glGetActiveUniform(GLuint program,
+                                        GLuint index,
+                                        GLsizei bufSize,
+                                        GLsizei *length,
+                                        GLint *size,
+                                        GLenum *type,
+                                        GLchar *name);
 
 #define glGetAttachedShaders _gl_debug_error_glGetAttachedShaders
 void _gl_debug_error_glGetAttachedShaders(GLuint program, GLsizei maxCount, GLsizei *count, GLuint *shaders);
@@ -710,7 +767,12 @@ void _gl_debug_error_glVertexAttrib4uiv(GLuint index, const GLuint *v);
 void _gl_debug_error_glVertexAttrib4usv(GLuint index, const GLushort *v);
 
 #define glVertexAttribPointer _gl_debug_error_glVertexAttribPointer
-void _gl_debug_error_glVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer);
+void _gl_debug_error_glVertexAttribPointer(GLuint index,
+                                           GLint size,
+                                           GLenum type,
+                                           GLboolean normalized,
+                                           GLsizei stride,
+                                           const GLvoid *pointer);
 
 #define glUniformMatrix2x3fv _gl_debug_error_glUniformMatrix2x3fv
 void _gl_debug_error_glUniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
@@ -971,7 +1033,12 @@ void _gl_debug_error_glFramebufferTexture1D(GLenum target, GLenum attachment, GL
 void _gl_debug_error_glFramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level);
 
 #define glFramebufferTexture3D _gl_debug_error_glFramebufferTexture3D
-void _gl_debug_error_glFramebufferTexture3D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level, GLint zoffset);
+void _gl_debug_error_glFramebufferTexture3D(GLenum target,
+                                            GLenum attachment,
+                                            GLenum textarget,
+                                            GLuint texture,
+                                            GLint level,
+                                            GLint zoffset);
 
 #define glFramebufferRenderbuffer _gl_debug_error_glFramebufferRenderbuffer
 void _gl_debug_error_glFramebufferRenderbuffer(GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer);
@@ -995,7 +1062,11 @@ void _gl_debug_error_glBlitFramebuffer(GLint srcX0,
                                        GLenum filter);
 
 #define glRenderbufferStorageMultisample _gl_debug_error_glRenderbufferStorageMultisample
-void _gl_debug_error_glRenderbufferStorageMultisample(GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height);
+void _gl_debug_error_glRenderbufferStorageMultisample(GLenum target,
+                                                      GLsizei samples,
+                                                      GLenum internalformat,
+                                                      GLsizei width,
+                                                      GLsizei height);
 
 #define glFramebufferTextureLayer _gl_debug_error_glFramebufferTextureLayer
 void _gl_debug_error_glFramebufferTextureLayer(GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer);
@@ -1019,13 +1090,24 @@ void _gl_debug_error_glGenVertexArrays(GLsizei n, GLuint *arrays);
 GLboolean _gl_debug_error_glIsVertexArray(GLuint array);
 
 #define glGetUniformIndices _gl_debug_error_glGetUniformIndices
-void _gl_debug_error_glGetUniformIndices(GLuint program, GLsizei uniformCount, const GLchar *const *uniformNames, GLuint *uniformIndices);
+void _gl_debug_error_glGetUniformIndices(GLuint program,
+                                         GLsizei uniformCount,
+                                         const GLchar *const *uniformNames,
+                                         GLuint *uniformIndices);
 
 #define glGetActiveUniformsiv _gl_debug_error_glGetActiveUniformsiv
-void _gl_debug_error_glGetActiveUniformsiv(GLuint program, GLsizei uniformCount, const GLuint *uniformIndices, GLenum pname, GLint *params);
+void _gl_debug_error_glGetActiveUniformsiv(GLuint program,
+                                           GLsizei uniformCount,
+                                           const GLuint *uniformIndices,
+                                           GLenum pname,
+                                           GLint *params);
 
 #define glGetActiveUniformName _gl_debug_error_glGetActiveUniformName
-void _gl_debug_error_glGetActiveUniformName(GLuint program, GLuint uniformIndex, GLsizei bufSize, GLsizei *length, GLchar *uniformName);
+void _gl_debug_error_glGetActiveUniformName(GLuint program,
+                                            GLuint uniformIndex,
+                                            GLsizei bufSize,
+                                            GLsizei *length,
+                                            GLchar *uniformName);
 
 #define glGetUniformBlockIndex _gl_debug_error_glGetUniformBlockIndex
 GLuint _gl_debug_error_glGetUniformBlockIndex(GLuint program, const GLchar *uniformBlockName);
@@ -1034,22 +1116,41 @@ GLuint _gl_debug_error_glGetUniformBlockIndex(GLuint program, const GLchar *unif
 void _gl_debug_error_glGetActiveUniformBlockiv(GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint *params);
 
 #define glGetActiveUniformBlockName _gl_debug_error_glGetActiveUniformBlockName
-void _gl_debug_error_glGetActiveUniformBlockName(GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei *length, GLchar *uniformBlockName);
+void _gl_debug_error_glGetActiveUniformBlockName(GLuint program,
+                                                 GLuint uniformBlockIndex,
+                                                 GLsizei bufSize,
+                                                 GLsizei *length,
+                                                 GLchar *uniformBlockName);
 
 #define glUniformBlockBinding _gl_debug_error_glUniformBlockBinding
 void _gl_debug_error_glUniformBlockBinding(GLuint program, GLuint uniformBlockIndex, GLuint uniformBlockBinding);
 
 #define glCopyBufferSubData _gl_debug_error_glCopyBufferSubData
-void _gl_debug_error_glCopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size);
+void _gl_debug_error_glCopyBufferSubData(GLenum readTarget,
+                                         GLenum writeTarget,
+                                         GLintptr readOffset,
+                                         GLintptr writeOffset,
+                                         GLsizeiptr size);
 
 #define glDrawElementsBaseVertex _gl_debug_error_glDrawElementsBaseVertex
 void _gl_debug_error_glDrawElementsBaseVertex(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLint basevertex);
 
 #define glDrawRangeElementsBaseVertex _gl_debug_error_glDrawRangeElementsBaseVertex
-void _gl_debug_error_glDrawRangeElementsBaseVertex(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid *indices, GLint basevertex);
+void _gl_debug_error_glDrawRangeElementsBaseVertex(GLenum mode,
+                                                   GLuint start,
+                                                   GLuint end,
+                                                   GLsizei count,
+                                                   GLenum type,
+                                                   const GLvoid *indices,
+                                                   GLint basevertex);
 
 #define glDrawElementsInstancedBaseVertex _gl_debug_error_glDrawElementsInstancedBaseVertex
-void _gl_debug_error_glDrawElementsInstancedBaseVertex(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLsizei primcount, GLint basevertex);
+void _gl_debug_error_glDrawElementsInstancedBaseVertex(GLenum mode,
+                                                       GLsizei count,
+                                                       GLenum type,
+                                                       const GLvoid *indices,
+                                                       GLsizei primcount,
+                                                       GLint basevertex);
 
 #define glMultiDrawElementsBaseVertex _gl_debug_error_glMultiDrawElementsBaseVertex
 void _gl_debug_error_glMultiDrawElementsBaseVertex(GLenum mode,
@@ -1084,7 +1185,12 @@ void _gl_debug_error_glGetInteger64v(GLenum pname, GLint64 *params);
 void _gl_debug_error_glGetSynciv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values);
 
 #define glTexImage2DMultisample _gl_debug_error_glTexImage2DMultisample
-void _gl_debug_error_glTexImage2DMultisample(GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations);
+void _gl_debug_error_glTexImage2DMultisample(GLenum target,
+                                             GLsizei samples,
+                                             GLint internalformat,
+                                             GLsizei width,
+                                             GLsizei height,
+                                             GLboolean fixedsamplelocations);
 
 #define glTexImage3DMultisample _gl_debug_error_glTexImage3DMultisample
 void _gl_debug_error_glTexImage3DMultisample(GLenum target,

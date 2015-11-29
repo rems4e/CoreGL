@@ -1,6 +1,6 @@
 //
 //  GLBuffer.hpp
-//  RPG 3D
+//  CoreGL
 //
 //  Created by Rémi on 02/07/13.
 //

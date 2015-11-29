@@ -1,15 +1,13 @@
 //
 //  Rectangle.h
-//  Projet2MIC
+//  CoreGL
 //
-//  Créé par Marc Promé et Rémi Saurel.
-//  Ce fichier et son contenu sont librement distribuables, modifiables et utilisables pour toute
-//  œuvre non commerciale,
-//  à condition d'en citer les auteurs.
+//  Created by Rémi on 28/07/11.
+//  Additional contributor (2012): Marc Promé
 //
 
-#ifndef RECTANGLE_H
-#define RECTANGLE_H
+#ifndef COREGL_RECTANGLE_H
+#define COREGL_RECTANGLE_H
 
 #include <algorithm>
 #include "Geometry.h"

@@ -1,13 +1,13 @@
 //
 //  Framebuffer.h
-//  RPG 3D
+//  CoreGL
 //
 //  Created by Rémi on 29/06/13.
 //
 //
 
-#ifndef __RPG_3D__Framebuffer__
-#define __RPG_3D__Framebuffer__
+#ifndef COREGL_FRAMEBUFFER_H
+#define COREGL_FRAMEBUFFER_H
 
 #include "GL.h"
 #include "Geometry.h"

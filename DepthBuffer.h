@@ -1,13 +1,13 @@
 //
 //  DepthBuffer.h
-//  RPG 3D
+//  CoreGL
 //
 //  Created by Rémi on 20/08/13.
 //
 //
 
-#ifndef __RPG_3D__DepthBuffer__
-#define __RPG_3D__DepthBuffer__
+#ifndef COREGL_DEPTH_BUFFER_H
+#define COREGL_DEPTH_BUFFER_H
 
 #include "GL.h"
 #include "Geometry.h"
